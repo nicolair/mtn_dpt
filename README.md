@@ -1,4 +1,6 @@
-hello-word
+mtn_dpt
 ==========
 
-mon dépôt de test
+MainTeNance DéPôT
+
+Collections de scripts Python assurant la maintenance des dépôts maquisdoc
