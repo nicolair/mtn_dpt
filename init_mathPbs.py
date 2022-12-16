@@ -37,13 +37,7 @@ sp_connect_data = {'region_name': 'fra1',
                    'bucket': 'maquisdoc-math',
                    'prefix': 'math-pbs/'}
 #      paramètres de connexion à la base de données en graphe
-# local
-# bdg_data = {'url' : 'bolt://localhost:7687', 'user': "neo4j", 'pw':"3128"}
-# graphenedb
 bdg_connect_data = {}
-# bdg_connect_data = {
-#    'uri' : "bolt://hobby-emmpngdpepmbgbkeiodbecbl.dbs.graphenedb.com:24786",
-#    'user': "mimi", 'pw': "b.qzcs8g8XgxeB.Sbc5iAoGjwGi60fr"}
 # ###########   FIN DE ZONE SECRETE    ###################
 
 
