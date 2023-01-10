@@ -1,19 +1,26 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Nov  9 08:11:02 2017
+Module principal de maintenance d'un dépôt.
 
-@author: nicolair
+Modifié le 09/01/23  @author: nicolair
 
-Module principal de maintenance d'un dépot.
-Importe les modules execlocal et espace.
-Instancie des classes Execlocal et Espace.
+- Importe les modules
+    - [`execlocal`](execlocal.html)
+    - [`espace`](espace.html)
+    - à définir (contextualisation).
 
-L'instanciation de la classe Execlocal exécute
-    - la maintenance des fichiers Latex
-    - les compilations des images
-    - place la liste des images publiables dans une propriété.
+- Définit la classe `Depot`.
 
-L'instanciation de la classe Espace exécute la maintenance de l'espace dédié.
+Le module `execlocal` définit la classe `Execlocal`. L'instanciation de cette
+classe réalise
+
+   - la maintenance des fichiers Latex
+   - les compilations des images
+   - place la liste des images publiables dans une propriété.
+
+Le module `espace` définit la classe `Espace`. L'instanciation de cette
+classe met à jour l'espace de publication selon l'état des images publiables
+ dans le dépôt local.
 
 La propriété `.log` contient le journal des instanciations.
 
@@ -31,62 +38,35 @@ if localpath not in sys.path:
 
 class Depot():
     """
-    Classe représentant un dépot.
+    Classe représentant un dépôt.
 
-    La maintenance est réalisée lors de l'instanciation.
+    La maintenance du dépôt est réalisée lors de l'instanciation.
 
     """
 
     def __init__(self, depot_data):
         """
-        Initialise.
+        Instancie un objet `Depot`.
 
-        Définit une propriété `log` : journal de la maintenance
-        Instancie une classe d'exécution locale
-            maintenance des fichiers Latex
-            compilations diverses
-        Instancie une classe de publication
-            maintenance de l'espace dédié au dépôt.
-        Instancie une classe de contextualisation
+        - Définit une propriété `.log` : journal de la maintenance.
+        - Instancie un objet `Execlocal`
+            - maintenance des fichiers Latex
+            - compilations diverses
+        - Ajoute le `.log` de l'instance de `Execlocal` au `.log` du `Depot`.
+        - Instancie une classe de publication `Espace`
+            - maintenance de l'espace dédié au dépôt.
+        - Ajoute le `.log` de l'instance d' `Espace` au `.log` du `Depot`.
+        - Instancie une classe de contextualisation
 
-        Parameters
+        Parametres
         ----------
-        depot_data : TYPE dictionnaire
-            DESCRIPTION code le manifeste du dépôt
-            exemple pour mathExos
-            ---------------------              {
-                "nom" : "math-exos",
-                "relative_path" : "../math-exos/",
-                "execloc_module" : "exl_mathExos",
-                "execloc_data" : [
-                  {
-                    "ext" : ".tex",
-                    "patterns" : ["A_*.tex"] ,
-                    "command": ["latexmk", "-f", "-pdf"]
-                  },
-                  {
-                    "ext" : ".asy",
-                    "patterns" : ["E*_*.asy","C*_*.asy"] ,
-                    "command": ["asy","-f","pdf"]
-                  },
-                  {
-                    "ext" : ".py",
-                    "patterns" : ["*_fig.py"] ,
-                    "command": ["python3"]
-                  }
-                ],
-                "publish_data" : {
-                  "patterns": ["A_*.pdf"],
-                  "liste" : ["A_"]
-                },
-                "espace" : {
-                  "region_name" : "fra1",
-                  "endpoint_url" : "https://fra1.digitaloceanspaces.com",
-                  "bucket" : "maquisdoc-math",
-                  "prefix" : "math-exos/"
-                },
-                "bdg" : {}
-              }.
+        - depot_data :
+            - TYPE dictionnaire
+            - DESCRIPTION code le manifeste du dépôt
+
+        La structure de ce dictionnaire est précisée dans le fichier
+        d'initialisation spécifique [`init_mathExos`](init_mathExos.html)
+        [`init_mathPbs`](init_mathPbs.html)
 
         Returns
         -------
@@ -94,6 +74,11 @@ class Depot():
 
         """
         self.log = "\n \t Initialisation de la classe Depot : "
+        """
+        Journal d'instanciation d'un objet `Depot`.
+
+        TYPE chaine de caractères.
+        """
 
         self.nom = depot_data['depot']['nom']
         self.rel_path = depot_data['depot']['relative_path']
@@ -107,15 +92,18 @@ class Depot():
 
         # classe de publication
         # for fic in self.publiables.keys():
-        #    if 'A_' in fic:
-        #        print(fic)
+        #    print(fic)
         esp = espace.Espace(depot_data['espace'], self.publiables)
         self.log += esp.log
 
         # classe de contextualisation
 
     def acontextualiser(self):
-        """Renvoie les données à mettre à jour dans le graphe neo4j."""
+        """
+        Renvoie les données à mettre à jour dans le graphe neo4j.
+
+        Pas encore utilisé.
+        """
         noeuds = []
         relations = []
         for obj in self.context_data:

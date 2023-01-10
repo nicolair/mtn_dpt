@@ -27,7 +27,7 @@ lineprefix = "\n \t \t"
 
 def exec():
     """
-    Forme les feuilles d'exos LateX et la liste des fichiers à publier.
+    Forme les exos individuels et les feuilles d'exos LateX.
 
     Returns
     -------

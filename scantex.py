@@ -12,10 +12,13 @@ import os
 
 def get_date_srce(nom):
     """
-        Fonction récursive.
-        Si un fichier ne contient ni input ni includegraphics renvoie
-            la date de maj du fichier.
-        Sinon renvoie la date la plus récente entre sa date de maj et celle
+    Renvoie une date de source.
+
+    Fonction récursive.
+        Si le fichier ne contient ni input ni includegraphics,
+            renvoie la date de maj du fichier.
+        Sinon
+            renvoie la date la plus récente entre sa date de maj et celle
             des input et includegraphics.
     """
     try:
@@ -47,9 +50,7 @@ def get_date_srce(nom):
 
 
 def get_liste_inputs(nom):
-    """
-    Liste des sources tex dans des input.
-    """
+    """Renvoie la liste des sources tex dans des input."""
     fifi = open(nom, 'r')
 
     text = fifi.read()
@@ -70,9 +71,7 @@ def get_liste_inputs(nom):
 
 
 def get_liste_includegraphics(nom):
-    """
-    Liste des figures (pdf) dans des includegraphics.
-    """
+    """Renvoie la liste des figures (pdf) dans des includegraphics."""
     fifi = open(nom, 'r')
     text = fifi.read()
     long = len(text)
@@ -97,8 +96,9 @@ def get_liste_includegraphics(nom):
 
 def get_liste_lstinputlistings(nom):
     """
-    Liste des fichiers contenant des lignes de codes
-        insérées par lstinputlisting
+    Renvoie une liste des fichiers.
+
+    Ceux contenant des lignes de codes insérées par lstinputlisting
     """
     fifi = open(nom, 'r')
     text = fifi.read()
@@ -123,7 +123,7 @@ def get_liste_lstinputlistings(nom):
 
 
 def aexec(src):
-    """renvoie vrai si un input plus récent que pdf"""
+    """Renvoie vrai si un input plus récent que pdf."""
     ext = os.path.splitext(src)[1]
     img = src.replace(ext, '.pdf')
     # print(img)
@@ -136,7 +136,9 @@ def aexec(src):
 
 def acompiler(src, img):
     """
-    Renvoie Vrai si un input de la source est plus récent que l'image
+    Renvoie Vrai si src est à compiler.
+
+    Cad si un input de la source est plus récent que l'image
 
     Parameters
     ----------

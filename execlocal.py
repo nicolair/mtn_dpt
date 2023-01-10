@@ -1,11 +1,26 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Oct 29 08:56:04 2018
+Éxécution locale des scripts de maintenance des sources d'un dépôt.
 
-Exécution locale des scripts de maintenance lors de l'instanciation de
-la classe `Execlocal`.
+Modifié le 09/01/23 @author: remy
 
-@author: remy
+- Importe le sous-module [`scantex`](scantex.html) d'examen des fichiers LateX.
+- Définit la classe `Execlocal`.
+
+L'instanciation d'un objet `Execlocal` traite les fichiers sources.
+
+Le traitement des fichiers sources (LateX, ...) se fait en deux temps:
+
+  - création-modification des sources avec un sous-module spécifique
+  - compilation des sources vers les fichiers publiables.
+
+
+Un objet `Execlocal`  présente la liste des fichiers publiables dans la
+ propriété `.publiables`.
+
+Sous-modules spécifiques pour les dépôts actuels:
+[`exl_mathExos`](exl_mathExos.html)
+[`exl_mathPbs`](exl_mathPbs.html)
 
 """
 import importlib
@@ -17,71 +32,43 @@ import scantex
 
 
 class Execlocal:
-    """
-    Exécute les scripts de compilation lors de l'instanciation.
-
-    Présente les fichiers publiables dans la propriété 'publiables'
-
-    """
+    """Classe d'exécution locale."""
 
     def __init__(self, depot_data):
         """
-        Initialise la classe à compléter.
+        Instancie un objet `Execlocal`.
 
-            récupère les paramètres du dépôt
-            initialise la propriété journal (`log`)
-            importe le module spécifique au dépôt
-            exécute
-                - scripts python spécifiques maj fichiers LateX
-                - commandes de compilation
-        Parameters
+        - récupère les paramètres du dépôt
+        - initialise la propriété journal (`.log`)
+        - importe le module spécifique au dépôt
+        - exécute
+            - scripts python spécifiques maj fichiers LateX
+            - commandes de compilation
+
+        Parametres
         ----------
-        depot_data : TYPE dictionnaire
-            DESCRIPTION   codage du *manifeste* du dépôt
-                exemple pour le dépôt mathExos
-                ------------------------------
-                  {
-                    "nom" : "math-exos",
-                    "relative_path" : "../math-exos/",
-                    "execloc_module" : "exl_mathExos",
-                    "execloc_data" : [
-                      {
-                        "ext" : ".tex",
-                        "patterns" : ["A_*.tex"] ,
-                        "command": ["latexmk", "-f", "-pdf"]
-                      },
-                      {
-                        "ext" : ".asy",
-                        "patterns" : ["E*_*.asy","C*_*.asy"] ,
-                        "command": ["asy","-f","pdf"]
-                      },
-                      {
-                        "ext" : ".py",
-                        "patterns" : ["*_fig.py"] ,
-                        "command": ["python3"]
-                      }
-                    ],
-                    "publish_data" : {
-                      "patterns": ["A_*.pdf"],
-                      "liste" : ["A_"]
-                    },
-                    "espace" : {
-                      "region_name" : "fra1",
-                      "endpoint_url" : "https://fra1.digitaloceanspaces.com",
-                      "bucket" : "maquisdoc-math",
-                      "prefix" : "math-exos/"
-                    },
-                    "bdg" : {}
-                  }
-.
+        depot_data :
+
+        - TYPE dictionnaire
+        - DESCRIPTION   codage du *manifeste* du dépôt
+
+        La structure de ce dictionnaire est précisée dans le fichier
+        d'initialisation spécifique [`init_mathExos`](init_mathExos.html)
+        [`init_mathPbs`](init_mathPbs.html)
 
         Returns
         -------
         None.
 
+
         """
         lineprefix = "\n \t \t"
         self.log = lineprefix + "Initialisation de la classe Execlocal."
+        """
+        Journal d'instanciation d'un objet `Execlocal`.
+
+        TYPE chaine de caractères.
+        """
 
         self.execloc_data = depot_data['depot']['execloc_data']
         self.rel_path = depot_data['depot']['relative_path']
@@ -92,13 +79,13 @@ class Execlocal:
         os.chdir(self.rel_path)
 
         # importation du module spécifique
-        # exécution de la maintenance des fichiers LateX
         module = depot_data['depot']['execloc_module']
         if module:
             try:
                 specific = importlib.import_module(module)
                 self.log += lineprefix
                 self.log += "Importation du module spécifique " + module
+                # maintenance des fichiers LateX
                 self.log += specific.exec()
             except ImportError as error:
                 self.log += lineprefix + "Module " + error.name + " pas trouvé"
@@ -120,12 +107,19 @@ class Execlocal:
 
     def aexecuter(self):
         """
-        Associe à chaque type de commande, la liste des fichiers à compiler par cette commande.
+        Renvoie une liste d'objets codant des commandes de compilation.
 
-        Returns
-        -------
-        aexec : TYPE liste d'objets
-            DESCRIPTION chaque objet code une série de commande.
+        Associe à chaque type de commande la liste des fichiers sur lesquels
+        elle doit s'appliquer.
+
+        Structure de l'objet codant un type de commande:
+
+            obj = {'ext': type['ext'],
+                   'imgdir': type['imgdir'],
+                   'imgext': type['imgext'],
+                   'command': type['command'],
+                   'fics': []}
+
 
         """
         self.log += ("\n \t \t Formation de la liste "
@@ -143,7 +137,9 @@ class Execlocal:
             # print(obj['command'], type['patterns'])
             for paty in type['patterns']:
                 paty = self.rel_path + paty
+                # print(paty, os.getcwd())
                 fics.extend(glob.glob(paty))
+                # print(fics,"\n")
 
             for src in fics:
                 srcext = os.path.splitext(src)[1]
@@ -159,9 +155,10 @@ class Execlocal:
 
     def apublierImg(self):
         """
-        Renvoie un dictionnaire
-            clé = chemin d'un fichier à publier
-            valeur = timestamp du fichier
+        Renvoie un dictionnaire de fichiers publiables.
+
+        - clé = chemin d'un fichier à publier
+        - valeur = timestamp du fichier
         """
         self.log += "\n \t \t Récup timesstamps"
         self.log += " locaux des fichiers à publier \n"
@@ -175,7 +172,10 @@ class Execlocal:
 
     def compil(self):
         """
-        Exécution des commandes de compilation.
+        Exécute les commandes de compilation.
+
+        Elles sont codées dans `self.cmds_list`.
+        Un compte rendu est placé dans le journal `self.log`.
         """
         self.log += '\n \t \t Exécution des compilations \n'
         log = ''

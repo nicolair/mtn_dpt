@@ -19,4 +19,17 @@ import scantex
 dp_data = {}
 dp_data['relative_path'] = '../math-pbs/'
 relpath = '../math-pbs/'
-# lineprefix = "\n \t \t"
+lineprefix = "\n \t \t"
+
+def exec():
+    """
+    Vérifie les fichiers "A".
+
+    Returns
+    -------
+    log : TYPE str
+        DESCRIPTION journal de l'exécution des scripts.
+
+    """
+    log = lineprefix + 'Scripts du module spécifique (fonction exec())'
+    return log

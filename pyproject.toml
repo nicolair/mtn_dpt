@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "maintenance"
+version = "0.1.0"
+description = ""
+authors = ["Rémy <remy.nicolai@gmail.com>"]
+packages = [{ include = "test.py"} ]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+boto3 = "^1.26.41"
+pdoc = "^12.3.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -1,13 +1,15 @@
 # -*- coding: utf-8
 """
+Module d'interface avec un espace.
+
 Created on Wed Jul  5 07:48:13 2017
 
 @author: nicolair
 
-Module d'interface avec un espace.
-
 Un "espace" est un service de stockage analogue au s3 de Amazon mais proposé
-par DigitalOcean.
+par DigitalOcean. Ce module présente la classe `Espace`. Une instanciation de
+cette classe réalise la mise à jour de l'espace pour refléter l'état local du
+dépôt.
 """
 import boto3
 import os.path
@@ -16,7 +18,10 @@ import mimetypes
 
 
 class Espace:
-    """Paramètres:
+    """
+    Classe Espace.
+
+    Paramètres:
         ----------
         connect_data: dictionnaire. Exemple :
           {
@@ -30,6 +35,8 @@ class Espace:
 
     def __init__(self, connect_data, apublier_data):
         """
+        Initialise la classe et met à jour l'espace.
+
         Pour les fichiers publiables cad ceux de "apublier_data":
             - récupère les clés associées et leur timestamp dans l'espace
             - si le fichier local est plus récent:
@@ -119,7 +126,8 @@ class Espace:
                                            'ContentType': file_mime_type})
 
     def MAJ(self):
-        """Mise à jour.
+        """
+        Mise à jour de l'espace.
 
         Avec self.bck_times et self.apublier:
               - supprime dans l'espace les clés

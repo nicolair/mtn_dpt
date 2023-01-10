@@ -1,12 +1,69 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Oct 23 11:06:36 2018
+Définit les paramètres d'initialisation de la maintenance du dépôt `math-exos`.
 
-@author: remy
+Modifié le 07/01/23 @author: remy
+
+- Code le *manifeste* du dépôt.
+- Définit les noms des sous-modules spécifiques
+- Définit les accès
+    - aux espaces (publication)
+    - à la base de données en graphe (contextualisation)
+
+Manifeste de `maths-exos`
+----------------------
+
+Le manifeste d'un dépôt code
+- les conventions de nommage des fichiers régissant sa structure
+- les commandes de traitement s'appliquant aux fichiers.
+
+Un code de 2 lettres caractérise un thème d'exercice.
+Le fichier `_codes.csv` dans le dépôt contient la liste des codes avec une
+brève description. Les premières lignes sont reproduites au dessous ::
+
+    codetheme;description
+    al;groupes anneaux corps
+    am;avec maple
+    ao;automorphismes orthogonaux
+    ap;approximations (zéros, intégrales, nombres réels)
+    ar;arithmétique dans Z et K[X]
+    ce;(courbes euclidiennes) étude métrique des courbes
+    cg;Fonctions d’une Variable Géométrique : continuité
+    co;coniques
+    cp;nombres complexes
+
+Le nom du fichier LateX d'un exercice est formé à partir du code de son thème
+    - précédé par `E` pour un énoncé et `C` pour un corrigé
+    - suivi du numéro (codé sur 2 chiffres) de l'exercice dans le thème
+
+Exemple `Ecp03.tex` et `Ccp03.tex` pour l'exercice numéro 3 portant sur les
+nombres complexes.
+
+Un fichier Latex dont le nom commence par `A` suivi du code d'un thème'
+est une *feuille d'exercice* sur le thème codé .
+Ces fichiers ne devraient pas être édités à la main.
+Ils sont mis à jour par ce script de maintenance puis compilés en pdf.
+Ces pdf sont placés dans *l'espace* de publication.
+
+
+Un fichier Latex dont le nom commence par `Aexo_` suivi du code d'un thème
+et de 2 chiffres est associé à un un exercice particulier.
+Ces fichiers ne devraient pas être édités à la main.
+Ils sont mis à jour par ce script de maintenance.
+Ces fichiers sont compilés en html, ces html sont placés dans *l'espace* de
+ publication.
+
+Paramètres d'accès
+------------------
+Ce sous-module ne définit que les paramètres publics. Les paramètres secrets
+sont définis par
+- variables d'environnement `NEO4J_URL`, `NEO4J_PASSWORD`
+ pour la base de données'
+- le fichier `~/.aws` pour l'espace de publication.
+
 """
-# import glob , fnmatch, shutil , os
 
-#                   paramètres du dépôt
+#  paramètres du dépôt
 # fichiers à exécuter localement
 execloc_data = [
     {'ext': '.tex', 'patterns': ['A_*.tex'],
@@ -41,7 +98,7 @@ dp_data = {'nom': 'math-exos',
            'publish_data': publish_data}
 
 
-#   #################       ZONE SECRETE   #################
+# Paramètres d'accès
 #       paramètres de connexion à l'espace (de publication web)
 sp_connect_data = {'region_name': 'fra1',
                    'endpoint_url': 'https://fra1.digitaloceanspaces.com',
