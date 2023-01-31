@@ -2,12 +2,10 @@
 """
 Module d'interface avec un espace.
 
-Created on Wed Jul  5 07:48:13 2017
-
-@author: nicolair
+Modifié le 13/01/23  @author: nicolair
 
 Un "espace" est un service de stockage analogue au s3 de Amazon mais proposé
-par DigitalOcean. Ce module présente la classe `Espace`. Une instanciation de
+par DigitalOcean. Ce module définit la classe `Espace`. Une instanciation de
 cette classe réalise la mise à jour de l'espace pour refléter l'état local du
 dépôt.
 """
@@ -21,16 +19,6 @@ class Espace:
     """
     Classe Espace.
 
-    Paramètres:
-        ----------
-        connect_data: dictionnaire. Exemple :
-          {
-            "region_name" : "fra1",
-            "endpoint_url" : "https://fra1.digitaloceanspaces.com",
-            "bucket" : "maquisdoc-math",
-            "prefix" : "math-exos/"
-          }
-
     """
 
     def __init__(self, connect_data, apublier_data):
@@ -41,17 +29,26 @@ class Espace:
             - récupère les clés associées et leur timestamp dans l'espace
             - si le fichier local est plus récent:
                       upload sur l'espace
+        #### Paramètres:
+        - connect_data: dictionnaire codant les données de connexion. Exemple :
+        
+                {
+                    "region_name" : "fra1",
+                    "endpoint_url" : "https://fra1.digitaloceanspaces.com",
+                    "bucket" : "maquisdoc-math",
+                    "prefix" : "math-exos/"
+                }
+                
+            Les données secrètes de connexion sont dans le fichier local
+            `~/.aws/credentials`.
 
-        Parameters
-        ----------
-        connect_data : TYPE dict
-            DESCRIPTION données de connexion à l'espace.
-        apublier_data : TYPE liste de dict
+        - apublier_data : liste de dictionnaires donnant les timestamps
+        des fichiers susceptibles d'être publiés.
+            
                 [{chemin de fichier local : timestamp du fichier},]
-            DESCRIPTION fichiers publiables.
 
-        Returns
-        -------
+        #### Renvoie
+
         None.
 
         """
@@ -71,7 +68,8 @@ class Espace:
 
     def get_times(self):
         """
-        Renvoie un dictionnaire.
+        Renvoie un dictionnaire donnant les dates de modifications des
+        fichiers de l'espace.
 
                clé = key d'un fichier du dépôt dans l'espace
                valeur = date modification
@@ -86,10 +84,15 @@ class Espace:
 
     def del_objs(self, keys):
         """
-        Supprime des objets et renvoie un message.
+        Supprime des objets et rend compte dans le journal.
+        
+        #### Paramètres:
+        
+        - `keys`: liste des clés à supprimer dans l'espace'
 
-        ceux dont les clés sont les valeurs
-         de la liste keys
+        #### Renvoie
+        
+        None
         """
         objs = []
         for key in keys:
@@ -107,14 +110,12 @@ class Espace:
 
         Avec un ACL public et un Content-Type déduit de l'extension.
 
-        Parameters
-        ----------
-        path : TYPE path
-            DESCRIPTION chemin du fichier à uploader dans l'espace.
-        key : TYPE str
-            DESCRIPTION clé du fichier uploadé dans l'espace.
+        #### Parametres
+        
+        - path : chemin du fichier à uploader dans l'espace.
+        - key : clé du fichier uploadé dans l'espace.
 
-        Returns
+        Renvoie
         -------
         None.
 

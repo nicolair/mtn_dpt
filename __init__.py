@@ -1,7 +1,7 @@
 """
 Package `Maintenance`. Maintient des dépôts maquisdoc.
 
-Modifié le 06/01/23 @author: remy
+Modifié le 31/01/23 @author: remy
 
 Attention dans cette documentation, le terme 'dépôt' désigne une composante
 du projet maquisdoc. On utilisera 'dépot (GitHub)' pour désigner un dépôt
@@ -53,3 +53,26 @@ Exemples de commande:
 - `poetry run pdoc ../maintenance` pour lancer la création de cette
  documentation.
 """
+
+import os
+import sys
+
+# pour permettre l'import programmatique
+localpath = os.path.dirname(__file__)
+if localpath not in sys.path:
+    sys.path.append(os.path.dirname(__file__))
+
+__all__ = [
+    "maintenir_mathExos",
+    "maintenir_mathPbs",
+    "init_mathExos",
+    "init_mathPbs",
+    "exl_mathExos",
+    "exl_mathPbs",
+    "depot",
+    "execlocal",
+    "scantex",
+    "espace",
+    "graphdb"
+    ]
+

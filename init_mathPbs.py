@@ -79,13 +79,22 @@ publish_data = {
     'patterns': ['pdfdir/A*.pdf'],
     'uri_esp': 'https://maquisdoc-math.fra1.digitaloceanspaces.com/'}
 
+# context_data ; données locales et url base en graphe
+context_data = {
+    'idx_path_pattern' : 'auxdir/A*.idx',
+    'description': {
+        'path_pattern': 'E*.tex',
+        'tags': ['%<dscrpt>', '</dscrpt>']
+        }
+}
+
 # dp pour dépôt
 dp_data = {'nom': 'math-pbs',
            'relative_path': '../math-pbs/',
            'execloc_module': execloc_module,
            'execloc_data': execloc_data,
-           'publish_data': publish_data}
-
+           'publish_data': publish_data,
+           'context_data': context_data}
 
 #       paramètres de connexion à l'espace (de publication web)
 sp_connect_data = {'region_name': 'fra1',
@@ -99,9 +108,12 @@ sp_connect_data = {'region_name': 'fra1',
                    }
 
 #      paramètres de connexion à la base de données en graphe
-bdg_connect_data = {}
-# ###########   FIN DE ZONE SECRETE    ###################
+bdg_connect_data = {'URI': os.getenv('NEO4J_URL'),
+                    'user': os.getenv('NEO4J_USERNAME'),
+                    'password': os.getenv('NEO4J_PASSWORD')}
 
 
 # paramètres de la maintenance
-para = {'depot': dp_data, 'espace': sp_connect_data, 'bdg': bdg_connect_data}
+para = {'depot': dp_data, 
+        'espace': sp_connect_data,
+        'bdg': bdg_connect_data}

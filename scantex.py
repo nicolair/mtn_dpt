@@ -1,24 +1,24 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon Oct 29 20:09:28 2018
+Outils d'analyse de fichiers sources ou produits par LateX.
 
-@author: remy
+Modifié le 22/01/23  @author: remy
 
-Outils d'analyse de fichiers tex
+Travaille dans le répertoire courant c'est à dire celui du dépôt à maintenir.'
 """
 import os
-
+import glob
 
 def get_date_srce(nom):
     """
     Renvoie une date de source.
 
     Fonction récursive.
-        Si le fichier ne contient ni input ni includegraphics,
-            renvoie la date de maj du fichier.
-        Sinon
-            renvoie la date la plus récente entre sa date de maj et celle
+    
+    - Si le fichier ne contient ni input ni includegraphics,
+        - renvoie la date de maj du fichier.
+    - Sinon
+         - renvoie la date la plus récente entre sa date de maj et celle
             des input et includegraphics.
     """
     try:
@@ -98,7 +98,7 @@ def get_liste_lstinputlistings(nom):
     """
     Renvoie une liste des fichiers.
 
-    Ceux contenant des lignes de codes insérées par lstinputlisting
+    Ceux contenant des lignes de codes insérées par `lstinputlisting`.
     """
     fifi = open(nom, 'r')
     text = fifi.read()
@@ -123,7 +123,7 @@ def get_liste_lstinputlistings(nom):
 
 
 def aexec(src):
-    """Renvoie vrai si un input plus récent que pdf."""
+    """Renvoie `Vrai` si un `input` plus récent que le `.pdf`."""
     ext = os.path.splitext(src)[1]
     img = src.replace(ext, '.pdf')
     # print(img)
@@ -136,19 +136,17 @@ def aexec(src):
 
 def acompiler(src, img):
     """
-    Renvoie Vrai si src est à compiler.
+    Renvoie `Vrai` si `src` est à compiler.
 
-    Cad si un input de la source est plus récent que l'image
+    C'est à dire si un `input` de la source est plus récent que l'image.
 
-    Parameters
-    ----------
-    src : TYPE
-        DESCRIPTION.
-    img : TYPE
-        DESCRIPTION.
+    #### Parameters
+    
+    - src : .
+    - img : chaine de caractère représentant le nom du fichier image.
 
-    Returns
-    -------
+    #### Returns
+
     None.
 
     """
@@ -162,3 +160,72 @@ def acompiler(src, img):
         #    print(img, date_src > date_img)
 
     return date_src > date_img
+
+def get_liste_indexations(path_pattern):
+    """
+    Renvoie la liste des indexations.
+    
+    Examine les fichiers .idx créés par la commande d'indexation lors de la
+    compilation.
+    
+    #### Paramètres
+    
+    `path_pattern`: str,  pattern de la chaine de caractère des chemins des fichiers
+    idx d'index.'  
+    Exemple `auxdir/A*.idx`.
+    
+    #### Returns
+    
+    Une liste de couples `[nomfic, litteral]` où
+    - `nomfic` est un nom de fichier .tex
+    - `litteral` est une chaine de caractères indexée dans `nomfic`. 
+    """
+    
+    indexations = []
+    idxpaths = glob.glob("auxdir/A*.idx")
+    for idxpath in idxpaths:
+        doc = os.path.basename(idxpath)
+        doc = doc.removeprefix('A')
+        doc = doc.removesuffix(('.idx'))
+        f = open(idxpath)
+        for line in f:
+            line = line.removeprefix('\\indexentry{')
+            i = line.find('|hyperpage')
+            line = line[0:i]
+            indexations.append([doc,line])
+        f.close()
+    # print(indexations)
+    return indexations
+
+def get_liste_descriptions(description_pattern):
+    """
+    Renvoie la liste des descriptions.
+    
+
+    #### Parametres
+    description_pattern : dictionnaire 
+        {
+            'path_pattern': pattern des chemins des fichiers à examiner,
+            'tags': paire de balises entourant la description
+        }
+
+    #### Renvoie
+    
+    Liste de couples ['nom du document', 'description de document']
+
+    """
+    descriptions = []
+    path_pattern = description_pattern['path_pattern']
+    tags = description_pattern['tags']
+    nomfics = glob.glob(path_pattern)
+    for nomfic in nomfics:
+        file = open(nomfic)
+        fictex = file.read()
+        file.close()
+        if i:= fictex.find(tags[0]) >= 0:
+            i += len(tags[0]) - 1
+            j = fictex.find(tags[1]) 
+            nomfic = nomfic.removeprefix(path_pattern[0])
+            nomfic = nomfic.removesuffix('.tex')
+            descriptions.append([nomfic,fictex[i:j]])
+    return descriptions

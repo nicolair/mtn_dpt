@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Module principal de maintenance d'un dépôt.
 
@@ -29,6 +28,7 @@ import os
 import sys
 import execlocal
 import espace
+import graphdb
 
 # pour permettre l'import programmatique
 localpath = os.path.dirname(__file__)
@@ -56,10 +56,11 @@ class Depot():
         - Instancie une classe de publication `Espace`
             - maintenance de l'espace dédié au dépôt.
         - Ajoute le `.log` de l'instance d' `Espace` au `.log` du `Depot`.
-        - Instancie une classe de contextualisation
+        - Instancie une classe de contextualisation `Maquis`.
+        - Ajoute le `.log` de l'instance de `Maquis` au `.log` du `Depot`.
 
-        Parametres
-        ----------
+        #### Parametres
+        
         - depot_data :
             - TYPE dictionnaire
             - DESCRIPTION code le manifeste du dépôt
@@ -68,8 +69,8 @@ class Depot():
         d'initialisation spécifique [`init_mathExos`](init_mathExos.html)
         [`init_mathPbs`](init_mathPbs.html)
 
-        Returns
-        -------
+        #### Renvoie
+        
         None.
 
         """
@@ -93,21 +94,11 @@ class Depot():
         # classe de publication
         # for fic in self.publiables.keys():
         #    print(fic)
-        esp = espace.Espace(depot_data['espace'], self.publiables)
-        self.log += esp.log
+        # esp = espace.Espace(depot_data['espace'], self.publiables)
+        # self.log += esp.log
 
         # classe de contextualisation
-
-    def acontextualiser(self):
-        """
-        Renvoie les données à mettre à jour dans le graphe neo4j.
-
-        Pas encore utilisé.
-        """
-        noeuds = []
-        relations = []
-        for obj in self.context_data:
-            truc = obj['extraire'](obj['para'])
-            noeuds.extend(truc['noeuds'])
-            relations.extend(truc['relations'])
-        return {'noeuds': noeuds, 'relations': relations}
+        maquisdoc = graphdb.Maquis(depot_data['bdg'], 
+                                   exl.indexations, 
+                                   exl.descriptions)
+        self.log += maquisdoc.log

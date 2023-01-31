@@ -1,22 +1,24 @@
 # -*- coding: utf-8 -*-
 """
-Éxécution locale des scripts de maintenance des sources d'un dépôt.
+Exécution locale des scripts de maintenance des sources d'un dépôt.
 
-Modifié le 09/01/23 @author: remy
+Modifié le 22/01/23 @author: remy
 
 - Importe le sous-module [`scantex`](scantex.html) d'examen des fichiers LateX.
 - Définit la classe `Execlocal`.
 
 L'instanciation d'un objet `Execlocal` traite les fichiers sources.
 
-Le traitement des fichiers sources (LateX, ...) se fait en deux temps:
+Le traitement des fichiers sources (LateX, ...) consiste en :
 
-  - création-modification des sources avec un sous-module spécifique
+  - création-modification des sources avec un sous-module *spécifique*
   - compilation des sources vers les fichiers publiables.
+  - examen des fichiers .idx d'index constitués lors de la compilation
 
+Un objet `Execlocal`  présente 
 
-Un objet `Execlocal`  présente la liste des fichiers publiables dans la
- propriété `.publiables`.
+- la liste des fichiers publiables dans la propriété `.publiables`.
+- la liste des indexations dans la propriété `.indexations`.
 
 Sous-modules spécifiques pour les dépôts actuels:
 [`exl_mathExos`](exl_mathExos.html)
@@ -44,9 +46,11 @@ class Execlocal:
         - exécute
             - scripts python spécifiques maj fichiers LateX
             - commandes de compilation
-
-        Parametres
-        ----------
+        - renseigne la propriété `.publiables`
+        - renseigne la propriété `.indexations`
+        
+        #### Parametres
+        
         depot_data :
 
         - TYPE dictionnaire
@@ -56,8 +60,8 @@ class Execlocal:
         d'initialisation spécifique [`init_mathExos`](init_mathExos.html)
         [`init_mathPbs`](init_mathPbs.html)
 
-        Returns
-        -------
+        #### Renvoie
+
         None.
 
 
@@ -73,6 +77,7 @@ class Execlocal:
         self.execloc_data = depot_data['depot']['execloc_data']
         self.rel_path = depot_data['depot']['relative_path']
         self.publish_data = depot_data['depot']['publish_data']
+        self.context_data = depot_data['depot']['context_data']
 
         # change de répertoire
         maintenance_path = os.getcwd()
@@ -94,13 +99,24 @@ class Execlocal:
         self.cmds_list = self.aexecuter()
 
         # compilations
-        # print('\n')
-        # for obj in self.cmds_list:
+        #print('\n')
+        #for obj in self.cmds_list:
         #    print(obj, '\n')
         self.compil()
 
+        # rensigne la propriété .publiables
         self.publiables = self.apublierImg()
-        # fichiers publiables dict path: date"""
+        # fichiers publiables dict path: date
+        
+        # renseigne la propriété .indexations
+        idx_path_pattern = self.context_data['idx_path_pattern']
+        self.indexations = scantex.get_liste_indexations(idx_path_pattern)
+        self.log += lineprefix + str(len(self.indexations)) + " indexations \n"
+        
+        # renseigne la propriété .description
+        description_pattern = self.context_data['description']
+        self.descriptions = scantex.get_liste_descriptions(description_pattern)
+        self.log += lineprefix + str(len(self.descriptions)) + " descriptions \n"
 
         # retour au répertoire de base
         os.chdir(maintenance_path)
