@@ -83,3 +83,4 @@ class Maquis:
         loc_descriptions.sort(key=lambda descrpt : descrpt[0])
         rem_descriptions.sort(key=lambda descrpt : descrpt[0])
         print(loc_descriptions[0], rem_descriptions[0])
+        print(len(loc_descriptions), len(rem_descriptions))
