@@ -6,9 +6,9 @@ Modifié le 24/01/23   @author: remy
 """
 import neo4j
 
-def format_cypher( param):
+def format_cypher_RETURN( param):
     """
-    Renvoie une requête cypher.
+    Renvoie une requête cypher de type `RETURN`.
     
     Dans la chaîne modèle
     
@@ -26,16 +26,97 @@ def format_cypher( param):
              'propsF' :"{typeDoc:'problème'}", 
              'propsR' : "n.titre, n.description"}.
 
-    #### Returns
+    #### Renvoie
     
-    req : TYPE chaine de caractères
-        DESCRIPTION requête cypher.
+    TYPE chaine de caractères
+    DESCRIPTION requête cypher.
 
     """
     req = "MATCH (n: {label} {propsF}) RETURN {propsR}"
     req = req.format(**param)
     return req
     
+def format_cypher_DELETE( param):
+    """
+    Renvoie une requête cypher de type `DETACH DELETE`.
+
+    ATTENTION ! Ce type de requte est à manier avec précaution. Toujours vérifier ce qui sera détruit.
+
+    Dans la chaîne modèle
+
+        "MATCH (n: {label} {propsF}) DETACH DELETE n"
+
+    remplace les variables entre accolades par les valeurs dans `param`.
+    Utilise la méthode `.format()` d'une chaine.
+
+    #### Parametres
+
+    param : TYPE dictionnaire
+        DESCRIPTION exemple pour supprimer le problème de titre 'grpe2' dans la base:
+
+            {'label' : "Document",
+             'propsF' :"{typeDoc:'problème' titre:'grpe2'}"}
+
+    #### Renvoie
+
+    TYPE chaine de caractères
+    DESCRIPTION requête cypher.
+
+    """
+    req = "MATCH (n: {label} {propsF}) DETACH DELETE n"
+    req = req.format(**param)
+    return req
+
+def format_cypher_SET( param):
+    """
+    Renvoie une requête cypher de type `SET`.
+
+    Dans la chaîne modèle
+
+        "MATCH (n: {label} {propsF}) SET {propsV}"
+
+    remplace les variables entre accolades par les valeurs dans `param`.
+    Utilise la méthode `.format()` d'une chaine.
+
+    #### Parametres
+
+    param : TYPE dictionnaire
+        DESCRIPTION exemple:
+
+            {'label' : "Document",
+             'propsF' :"{typeDoc:'problème'}",
+             'propsV' : "n.description = tagada"}.
+
+    #### Renvoie
+
+    TYPE chaine de caractères
+    DESCRIPTION requête cypher.
+
+    """
+    req = "MATCH (n: {label} {propsF}) SET {propsV}"
+    req = req.format(**param)
+    return req
+
+
+def do_cypher_tx(tx, cypher):
+    """
+    Exécute une requête cypher et renvoie les valeurs retournées.
+
+    #### Parametres
+
+    tx: TYPE transaction neo4j DESCRIPTION lié à la session neo4j *pas clair!*
+
+    cypher: TYPE chaine de caractères DESCRIPTION requête cypher
+
+    #### Renvoie
+
+    TYPE liste
+
+    DESCRIPTION valeurs retournées par la requête
+    """
+    result = tx.run(cypher)
+    values = [record.values() for record in result]
+    return values
 
 class Maquis:
     """
@@ -55,25 +136,10 @@ class Maquis:
         URI = connect_data['URI']
         AUTH = (connect_data['user'], connect_data['password'])
     
-                
-        def do_cypher_tx(tx, cypher):
-            result = tx.run(cypher)
-            values = [record.values() for record in result]
-            return values
-        
-        # descriptions
-        #label = "Document"
-        #propsF ="{typeDoc:'problème'}"
-        #propsR = "n.titre, n.description"
-        
-        #req = "MATCH (n: {label} {propsF}) RETURN {propsR}"
-        #req = req.format(label = label,
-        #                 propsF = propsF,
-        #                 propsR = propsR)
         param = {'label' : "Document", 
                  'propsF' :"{typeDoc:'problème'}", 
                  'propsR' : "n.titre, n.description"}
-        req = format_cypher(param)
+        req = format_cypher_RETURN(param)
 
         with neo4j.GraphDatabase.driver(URI, auth=AUTH).session(database="neo4j") as session:
             rem_descriptions = session.execute_read(do_cypher_tx, req)
@@ -82,5 +148,45 @@ class Maquis:
         
         loc_descriptions.sort(key=lambda descrpt : descrpt[0])
         rem_descriptions.sort(key=lambda descrpt : descrpt[0])
-        print(loc_descriptions[0], rem_descriptions[0])
+        #print(loc_descriptions[0], rem_descriptions[0])
         print(len(loc_descriptions), len(rem_descriptions))
+
+        n = min(len(loc_descriptions), len(rem_descriptions))
+        blabla = "-------\n"
+        blabla += "LOCAL nom: {nomL} description {descrpL} \n"
+        blabla += "REMOTE nom {nomR} description: {descrpR}\n"
+
+        for i in range(n):
+            nomL = loc_descriptions[i][0]
+            descrpL = loc_descriptions[i][1]
+            nomR = rem_descriptions[i][0]
+            descrpR = rem_descriptions[i][1]
+            params = {
+                'nomL' : nomL,
+                'descrpL' : descrpL,
+                'nomR' : nomR,
+                'descrpR' : descrpR
+            }
+
+            if nomL == nomR and descrpL != descrpR:
+                print(blabla.format(**params))
+                param['label'] = 'Document'
+                param['propsF'] = 'typeDoc:"problème", titre:"{titre}"'.format(titre=nomR)
+                param['propsF'] = '{' + param['propsF'] + '}'
+                param["propsV"] = 'n.description = "{descrpL}"'.format(descrpL=descrpL)
+                req = format_cypher_SET(param)
+                print(req)
+
+        nomsR = [descrpR[0] for descrpR in rem_descriptions]
+        nomsL = [descrpL[0] for descrpL in loc_descriptions]
+        rem_orphs = []
+        for nom in nomsR:
+            if nom not in nomsL:
+                rem_orphs.append(nom)
+        print(rem_orphs)
+
+        loc_orphs = []
+        for nom in nomsL:
+            if nom not in nomsR:
+                loc_orphs.append(nom)
+        print(loc_orphs)
