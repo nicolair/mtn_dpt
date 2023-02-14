@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sun Oct 25 18:24:59 2020
+Module de scripts (à exécuter localement) spécifiques au dépôt d'exercices et complétant les commandes définies dans le manifeste..
 
-@author: remy
+Modifié le 09/02/23 @author: remy
 
-Module d'exécution locale de scripts spécifiques au dépôt d'exercices
-    - Lit les thèmes depuis le fichier _codes.csv
-    - Pour chaque thème, forme le fichier LateX "A_"
-    - Pour chaque exercice, forme le fichier LateX "Aexo_"
-    - Renvoie un journal de l'exécution
+La fonction `exec()` exécute les tâches spécifiques complémentaires. Elle est appelée lors de l'instanciation de la classe `Execlocal`.
 
 """
 import csv
@@ -28,6 +24,12 @@ lineprefix = "\n \t \t"
 def exec():
     """
     Forme les exos individuels et les feuilles d'exos LateX.
+
+    - Lit les thèmes depuis le fichier `_codes.csv`
+    - Pour chaque thème, forme le fichier LateX `A_`
+    - Pour chaque exercice, forme le fichier LateX `Aexo_`
+    - Renvoie un journal de l'exécution
+
 
     Returns
     -------

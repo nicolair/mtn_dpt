@@ -94,8 +94,8 @@ class Depot():
         # classe de publication
         # for fic in self.publiables.keys():
         #    print(fic)
-        # esp = espace.Espace(depot_data['espace'], self.publiables)
-        # self.log += esp.log
+        esp = espace.Espace(depot_data['espace'], self.publiables)
+        self.log += esp.log
 
         # classe de contextualisation
         maquisdoc = graphdb.Maquis(depot_data['bdg'], 

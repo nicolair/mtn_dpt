@@ -1,13 +1,20 @@
 # -*- coding: utf-8 -*- 
 """
-Created on Wed Dec  7 07:03:24 2022
+Module de scripts (à exécuter localement) spécifiques au dépôt de problèmes et complétant les commandes définies dans le manifeste.
 
-@author: remy
+Modifié le 09/02/23 @author: remy
 
-Module d'exécution locale de scripts spécifiques au dépôt de problèmes.
-    - Forme la liste des énoncés Latex dans le dossier
-    - Forme les fichiers A avec énoncé et corrigé (éventuel)
-    - Forme la liste des fichiers à publier
+
+La fonction `exec()` exécute les tâches spécifiques complémentaires. Elle est appelée lors de l'instanciation de la classe `Execlocal`.
+
+Pour le moment aucun script complémentaire n'est nécessaire. La fonction `exec()` renvoie seulement une ligne dans le journal indiquant la prise en compte de ce module.
+
+J'envisage d'automatiser la création des fichiers `A` à partir des énoncés`E`. Pour le moment, ils sont créés à la main.  
+Pour cette hypothétique automatisation, il faudrait:
+
+- Former la liste des énoncés Latex dans le dossier
+- Former les fichiers `A` avec énoncé et corrigé (éventuel)
+- Former la liste des fichiers à publier
 """
 import csv
 import glob
@@ -23,7 +30,7 @@ lineprefix = "\n \t \t"
 
 def exec():
     """
-    Vérifie les fichiers "A".
+    Complète le journal.
 
     Returns
     -------

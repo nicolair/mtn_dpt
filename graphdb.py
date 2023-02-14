@@ -148,13 +148,35 @@ class Maquis:
         
         loc_descriptions.sort(key=lambda descrpt : descrpt[0])
         rem_descriptions.sort(key=lambda descrpt : descrpt[0])
-        #print(loc_descriptions[0], rem_descriptions[0])
-        print(len(loc_descriptions), len(rem_descriptions))
 
+        # Nbs de problèmes
+        blabla = "Nbs de pbs. local: {nloc},  base: {nrem}".format(nloc=len(loc_descriptions),
+                                                                   nrem=len(rem_descriptions)) 
+        print(blabla)
+
+        #Noeuds isolés (orphelins)
+        nomsR = [descrpR[0] for descrpR in rem_descriptions]
+        nomsL = [descrpL[0] for descrpL in loc_descriptions]
+        rem_orphs = []
+        for nom in nomsR:
+            if nom not in nomsL:
+                rem_orphs.append(nom)
+        blabla = "Pbs ds neo4j sans source locale (à supprimer) : {}".format(rem_orphs) 
+        print(blabla)
+
+        loc_orphs = []
+        for nom in nomsL:
+            if nom not in nomsR:
+                loc_orphs.append(nom)
+        blabla = "Pbs locaux sans reflet dans neo4j (à écrire) : ".format(loc_orphs)
+        print(blabla)
+
+        #Descriptions 
+        print("\n Descriptions différentes local/base, requête cypher")
         n = min(len(loc_descriptions), len(rem_descriptions))
         blabla = "-------\n"
-        blabla += "LOCAL nom: {nomL} description {descrpL} \n"
-        blabla += "REMOTE nom {nomR} description: {descrpR}\n"
+        blabla += "LOCAL nom: {nomL} description: {descrpL} \n"
+        blabla += "REMOTE nom: {nomR} description: {descrpR}\n"
 
         for i in range(n):
             nomL = loc_descriptions[i][0]
@@ -177,16 +199,6 @@ class Maquis:
                 req = format_cypher_SET(param)
                 print(req)
 
-        nomsR = [descrpR[0] for descrpR in rem_descriptions]
-        nomsL = [descrpL[0] for descrpL in loc_descriptions]
-        rem_orphs = []
-        for nom in nomsR:
-            if nom not in nomsL:
-                rem_orphs.append(nom)
-        print(rem_orphs)
-
-        loc_orphs = []
-        for nom in nomsL:
-            if nom not in nomsR:
-                loc_orphs.append(nom)
-        print(loc_orphs)
+        #index
+        print("\n Indexations locales")
+        print(loc_indexations)

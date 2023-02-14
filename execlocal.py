@@ -104,7 +104,7 @@ class Execlocal:
         #    print(obj, '\n')
         self.compil()
 
-        # rensigne la propriété .publiables
+        # renseigne la propriété .publiables
         self.publiables = self.apublierImg()
         # fichiers publiables dict path: date
         

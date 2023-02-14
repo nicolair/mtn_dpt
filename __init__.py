@@ -1,7 +1,7 @@
 """
-Package `Maintenance`. Maintient des dépôts maquisdoc.
+Package `Maintenance`. Maintient les dépôts maquisdoc.
 
-Modifié le 06/02/23 @author: remy
+Modifié le 09/02/23 @author: remy
 
 Attention dans cette documentation, le terme 'dépôt' désigne une composante
 du projet maquisdoc. On utilisera 'dépot (GitHub)' pour désigner un dépôt
@@ -29,8 +29,7 @@ dépôt(GitHub). Les scripts et modules de maintenance ne sont pas encore implé
 |math-cours        | [math-cours](https://github.com/nicolair/math-cours) | à faire |
 |math-rapidexos    | [math-cours](https://github.com/nicolair/math-rapidexos) | à faire |
 
-Le script de maintenance importe des sous-modules spécifiques ainsi que des
- sous-modules communs.
+Le script de maintenance importe des sous-modules spécifiques ainsi que des sous-modules communs.
 
 Par exemple, les sous-modules dont le nom se termine par `_mathExos` sont
 spécifiques au dépôt d'exercices `math-Exos`.
@@ -42,51 +41,48 @@ modules spécifiques sont formés en passant du tiret à la majuscule dans le
 nom du dépôt. Exemple `init_mathExos` et `exl_mathExos`.
 dans lesquels `math-exos` a été changé en `mathExos`.
 
-La maintenance utilise des bibliothèques Python externes.
-
-- [boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html) : client de l'API d'un espace
-- [neo4j](https://neo4j.com/docs/api/python-driver/current/) : client de l'API de la base de données en graphe (neo4j)
-- [pdoc](https://pdoc.dev/docs/pdoc.html)  : génération de cette documentation.
-
-La gestion de l'environnement virtuel et des dépendances est assuré par [Poetry](https://python-poetry.org/docs/).
+La maintenance utilise des modules externes à la bibliothèque Python standard. La gestion de l'environnement virtuel et des dépendances est assuré par [Poetry](https://python-poetry.org/docs/).  
 Exemples de commande:
-- `poetry run ./maintenir_mathExos.py` pour lancer la maintenance du dépôt
+- `poetry install` pour installer localement les dépendances du projet définies dans `pyproject.toml` 
+- `poetry run python ./maintenir_mathExos.py` pour lancer la maintenance du dépôt
  d'exercice
 - `poetry run pdoc ../maintenance.py -o ./docs` pour lancer la création de cette
  documentation.
 
-La maintenance d'un dépôt est lançée par le script indiqué dans le tableau précédent. Il importe un module spécifique d'initialisation (son nom commence par `init_`) représentant le *manifeste* du dépôt. Il importe aussi des modules communs à tous les dépôts. Les différents types de modules et les classes définies sont précisés dans le paragraphe suivant. La maintenance du dépôt des problèmes est détaillée.
+La maintenance d'un dépôt est lançée par le script indiqué dans le tableau précédent. Il importe d'abord le module spécifique d'initialisation (son nom commence par `init_`) représentant le *manifeste* du dépôt. Il importe ensuite des modules communs ainsi que d'autres modules spécifiques. Les différents types de modules et les classes définies sont précisés dans le paragraphe suivant. La maintenance du dépôt des problèmes est détaillée.
 
 ####  Modules et classes
 Les modules importés lors d'une maintenance sont de différents types.
 
 <div style="text-align: center;">
-  Modules communs
+  Modules locaux communs
 </div>
 
 | nom           | rôle             | importe |
 | ------------- | ---------------- | --------- |
-| `depot`       | module principal | `execlocal`, `espace` |
-| `execlocal`   | définit la classe `Execlocal` | `scantex` |
-| `scantex`     | outils d'analyse de fichiers .tex |     |
-| `espace`      | definit la classe `Espace` |     |
+| `depot`       | [module principal](maintenance/depot.html) | `execlocal`, `espace` |
+| `execlocal`   | [définit la classe `Execlocal`](maintenance/execlocal.html) | `scantex`, `exl_` spécifique |
+| `scantex`     | [outils d'analyse de fichiers .tex](maintenance/scantex.html) |     |
+| `espace`      | [definit la classe `Espace`](maintenance/espace.html) |     |
+| `graphdb`     | [définit la classe `Maquis`](maintenance/graphdb.html) | `bdg_` spécifique |
 
 
 
 <div style="text-align: center; margin-top: 5px;">
-  Modules spécifiques
+  Modules locaux spécifiques
 </div>
 
 | nom            | rôle                       |
 | -------------- | -------------------------- |
-| `init_mathPbs` | initialisation, manifeste |
-| `exl_mathPbs`  | scripts de manipulation de fichiers locaux |
-| `init_mathExos` | initialisation, manifeste |
-| `exl_mathExos` | scripts de manipulation de fichiers locaux |
+| `init_mathPbs` | [initialisation, manifeste](maintenance/init_mathPbs.html) |
+| `exl_mathPbs`  | [scripts de manipulation de fichiers locaux](maintenance/exl_mathPbs.html) |
+| `bdg_mathPbs`  | [manipulation de données de la base en graphe](maintenance/bdg_mathExos.html) |
+| `init_mathExos` | [initialisation, manifeste](maintenance/init_mathExos.html) |
+| `exl_mathExos` | [scripts de manipulation de fichiers locaux](maintenance/exl_mathExos.html) |
 
 
 <div style="text-align: center; margin-top: 5px;">
-  Modules externes
+  Modules de la bibliothèque Python
 </div>
 
 | nom          | rôle  |
@@ -97,8 +93,16 @@ Les modules importés lors d'une maintenance sont de différents types.
 | `subprocess` | [Subprocess management](https://docs.python.org/3.11/library/subprocess.html?highlight=subprocess#module-subprocess) |
 | `glob`       | [Unix style pathname pattern expansion](https://docs.python.org/3.11/library/glob.html)|
 | `os.path`    | [Common pathname manipulations](https://docs.python.org/3.11/library/os.path.html) |
-| `boto3`      | API espace |
 | `mimetypes`  | [Map filenames to MIME types](https://docs.python.org/3.11/library/mimetypes.html?highlight=mimetypes#module-mimetypes) |
+
+<div style="text-align: center; margin-top: 5px;">
+  Modules externes
+</div>
+| nom          | rôle  |
+| -----------  | ----- |
+| `boto3`      |[client de l'API d'un espace](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html)|
+| `neo4j`      |[client de l'API de la base de données en graphe (neo4j)](https://neo4j.com/docs/api/python-driver/current/)|
+|`pdoc`        |[génération de cette documentation](https://pdoc.dev/docs/pdoc.html)|
 
 
 Les modules définissent diverses classes. Ce sont les instanciations de ces classes qui effectuent les différentes tâches de la maintenance.
@@ -153,6 +157,7 @@ __all__ = [
     "execlocal",
     "scantex",
     "espace",
-    "graphdb"
+    "graphdb",
+    "bdg_mathPbs"
     ]
 
