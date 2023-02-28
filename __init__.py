@@ -1,7 +1,7 @@
 """
 Package `Maintenance`. Maintient les dépôts maquisdoc.
 
-Modifié le 09/02/23 @author: remy
+Modifié le 14/02/23 @author: remy
 
 Attention dans cette documentation, le terme 'dépôt' désigne une composante
 du projet maquisdoc. On utilisera 'dépot (GitHub)' pour désigner un dépôt
@@ -60,7 +60,7 @@ Les modules importés lors d'une maintenance sont de différents types.
 
 | nom           | rôle             | importe |
 | ------------- | ---------------- | --------- |
-| `depot`       | [module principal](maintenance/depot.html) | `execlocal`, `espace` |
+| `depot`       | [module principal](maintenance/depot.html) | `execlocal`, `espace`, `graphdb` |
 | `execlocal`   | [définit la classe `Execlocal`](maintenance/execlocal.html) | `scantex`, `exl_` spécifique |
 | `scantex`     | [outils d'analyse de fichiers .tex](maintenance/scantex.html) |     |
 | `espace`      | [definit la classe `Espace`](maintenance/espace.html) |     |
@@ -113,9 +113,10 @@ Les modules définissent diverses classes. Ce sont les instanciations de ces cla
 
 | nom         | module      | rôle |
 | ----------- | ----------- | ----- |
-| `Depot`     | `depot`     | instancie `Execlocal` |
-| `Execlocal` | `execlocal` |     |
-| `Espace`    | `espace`    | interface avec l'espace DO |
+| `Depot`     | `depot`     | instancie les 3 classes suivantes |
+| `Execlocal` | `execlocal` | interface avec le dossier local du dépôt  |
+| `Espace`    | `espace`    | interface avec l'espace Digital Ocean |
+| `Maquis`    | `graphdb`   | interface avec la base en graphe neo4j |
 
 ####  Exemple avec *math-pbs*
 La maintenance est lancée par la commande
@@ -124,17 +125,26 @@ La maintenance est lancée par la commande
 
 dans le dossier contenant le script.
 
-Ce script importe les modules `init_mathPbs` et `depot` puis instancie un objet `Depot`.
-Le module `depot` importe les modules `execlocal` et `espace`.
+Ce script importe les modules `init_mathPbs` et `depot` puis instancie un objet `Depot`.  
+Le module `depot` importe les modules `execlocal`, `espace` et `graphdb`.  
 L'initialisation de l'instance de `Depot` instancie
 - un objet `Execlocal`
 - un objet `Espace`
+- un objet `Maquis`
 
-La mise à jour d'un espace associé à un dépôt se fait lors de l'instanciation de l'objet `Espace`.
+L'instanciation de l'objet `Execlocal` met à jour le dossier local.
 
-Le module `boto3` fournit un client Python pour l'API de l'espace.
+L'instanciation de l'objet `Espace` met à jour l'espace associé au dépôt.
 
-Les credentials d'accès à un espace sont des clés générées à partir de l'interface Digital Ocean. Ces clés sont stockées localement sur la machine du dépôt dans le fichier `~/.aws/credentials` auquel accède silencieusement le client `boto3`.
+> Le module `boto3` fournit un client Python pour l'API de l'espace.  
+> Les credentials d'accès à un espace sont des clés générées à partir de l'interface Digital Ocean. Ces clés sont stockées localement dans le fichier `~/.aws/credentials` auquel accède silencieusement le client `boto3`.
+
+
+L'instanciation de l'objet `Maquis` met à jour la partie de la base en graphe associée au dépôt.
+
+> Le module `neo4j` fournit un client Python pour l'API de la base en graphe.  
+> Les credentials d'accès à la base (user, password) sont récupérés (`sp_connect_data`) à partir de variables d'environnement lors de l'importation de `init_mathPbs`.
+
 
 """
 
@@ -153,11 +163,11 @@ __all__ = [
     "init_mathPbs",
     "exl_mathExos",
     "exl_mathPbs",
+    "bdg_mathPbs",
     "depot",
     "execlocal",
     "scantex",
     "espace",
-    "graphdb",
-    "bdg_mathPbs"
+    "graphdb"
     ]
 

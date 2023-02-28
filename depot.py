@@ -44,12 +44,12 @@ class Depot():
 
     """
 
-    def __init__(self, depot_data):
+    def __init__(self, data):
         """
         Instancie un objet `Depot`.
 
         - Définit une propriété `.log` : journal de la maintenance.
-        - Instancie un objet `Execlocal`
+        - Instancie une classe d'exécution locale `Execlocal`
             - maintenance des fichiers Latex
             - compilations diverses
         - Ajoute le `.log` de l'instance de `Execlocal` au `.log` du `Depot`.
@@ -60,8 +60,8 @@ class Depot():
         - Ajoute le `.log` de l'instance de `Maquis` au `.log` du `Depot`.
 
         #### Parametres
-        
-        - depot_data :
+
+        - data :
             - TYPE dictionnaire
             - DESCRIPTION code le manifeste du dépôt
 
@@ -70,7 +70,7 @@ class Depot():
         [`init_mathPbs`](init_mathPbs.html)
 
         #### Renvoie
-        
+
         None.
 
         """
@@ -81,24 +81,28 @@ class Depot():
         TYPE chaine de caractères.
         """
 
-        self.nom = depot_data['depot']['nom']
-        self.rel_path = depot_data['depot']['relative_path']
-        self.execloc_data = depot_data['depot']['execloc_data']
-        self.execloc_module = depot_data['depot']['execloc_module']
+        self.nom = data['nom']
+        # self.nom = depot_data['depot']['nom']
+
+        #self.rel_path = depot_data['depot']['relative_path']
+        self.rel_path = data['execloc']['relative_path']
+        #self.execloc_data = depot_data['depot']['execloc_data']
+        #self.execloc_module = depot_data['depot']['execloc_module']
+        self.execloc_module = data['execloc']['modulespec']
 
         # classe d'exécution locale
-        exl = execlocal.Execlocal(depot_data)
+        exl = execlocal.Execlocal(data['execloc'])
         self.publiables = exl.publiables
         self.log += exl.log
 
         # classe de publication
         # for fic in self.publiables.keys():
         #    print(fic)
-        esp = espace.Espace(depot_data['espace'], self.publiables)
+        esp = espace.Espace(data['espace'], self.publiables)
         self.log += esp.log
 
         # classe de contextualisation
-        maquisdoc = graphdb.Maquis(depot_data['bdg'], 
-                                   exl.indexations, 
+        maquisdoc = graphdb.Maquis(data['context'],
+                                   exl.indexations,
                                    exl.descriptions)
         self.log += maquisdoc.log

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Modifié le 07/01/23  @author: remy
+Modifié le 15/02/23  @author: remy
 
 Maintenir le dépôt `math-pbs`.
 
@@ -17,7 +17,7 @@ if __name__ == '__main__':
     journal = {}
 
     #                        INSTANCIATION d'un objet Depot
-    dp = depot.Depot(init_DPT.para)
+    dp = depot.Depot(init_DPT.data)
     journal = dp.log
 
     print(journal)

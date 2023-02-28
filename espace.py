@@ -21,7 +21,7 @@ class Espace:
 
     """
 
-    def __init__(self, connect_data, apublier_data):
+    def __init__(self, data, apublier_data):
         """
         Initialise la classe et met à jour l'espace.
 
@@ -52,6 +52,7 @@ class Espace:
         None.
 
         """
+        connect_data = data['credentials']
         self.log = "\t Initialisation de la classe Espace \n"
         r_n = connect_data['region_name']
         e_u = connect_data['endpoint_url']
@@ -154,7 +155,7 @@ class Espace:
             file_name = os.path.basename(path)
             key_a_updater = self.prefix + file_name
             fic_a_updater_time = fic_times[path]
-            self.log += '\t \t '
+            #self.log += '\t \t '  ajoute des espaces inutiles si rien à updater
             if key_a_updater in key_times:
                 key_a_updater_time = key_times[key_a_updater].timestamp()
                 if fic_a_updater_time > key_a_updater_time:

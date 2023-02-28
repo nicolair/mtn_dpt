@@ -1,25 +1,30 @@
 # -*- coding: utf-8 -*-
 """
-Définit les paramètres d'initialisation de la maintenance du dépôt `math-exos`.
+Ce module code le manifeste du dépôt `math-exos`.
 
-Modifié le 07/01/23 @author: remy
+Modifié le 22/02/23 @author: remy
 
-- Code le *manifeste* du dépôt.
-- Définit les noms des sous-modules spécifiques
-- Définit les accès
-    - aux espaces (publication)
-    - à la base de données en graphe (contextualisation)
+Le manifeste d'un dépôt décrit
+- les conventions de nommage des fichiers permettant leur traitement local avant publication et contextualisation,
+- les commandes de traitement local,
+- les données du serveur de publication spécifique au dépôt,
+- les données du serveur de contextualisation spécifique au dépôt.
 
-Manifeste de `maths-exos`
-----------------------
 
-Le manifeste d'un dépôt code
-- les conventions de nommage des fichiers régissant sa structure
-- les commandes de traitement s'appliquant aux fichiers.
+Ce module définit un dictionnaire `data`.
+- `data['nom']` présente le nom du dépôt : 'math-pbs'
+- `data['execloc']` présente les paramètre de traitement local
+- `data['espace']` présente les paramètres de publication
+- `data['context']` présente les paramètres de contextualisation
 
-Un code de 2 lettres caractérise un thème d'exercice.
-Le fichier `_codes.csv` dans le dépôt contient la liste des codes avec une
-brève description. Les premières lignes sont reproduites au dessous ::
+### Conventions denommage
+
+L'élément essentiel de ce dépôt est un exercice. Un exercice particulier est caractérisé par une chaîne (appelé ici assez improprement son titre) formée de 2 lettres puis de 2 chiffres.
+
+Les 2 lettres codent un thème d'exercice, les 2 chiffres codent le numéro de l'exercice dans le thème.
+
+Le fichier [`_codes.csv`](https://github.com/nicolair/math-exos/blob/master/_codes.csv) dans le dépôt contient la liste des codes avec une
+brève description. Les premières lignes sont reproduites au dessous :
 
     codetheme;description
     al;groupes anneaux corps
@@ -32,26 +37,23 @@ brève description. Les premières lignes sont reproduites au dessous ::
     co;coniques
     cp;nombres complexes
 
-Le nom du fichier LateX d'un exercice est formé à partir du code de son thème
-    - précédé par `E` pour un énoncé et `C` pour un corrigé
-    - suivi du numéro (codé sur 2 chiffres) de l'exercice dans le thème
+Les noms des fichiers LateX caractérisant un exercice est formé à partir de son titre: précédé par `E` pour l'énoncé et par `C` pour le corrigé. Parfois l'exercice n'est pas encore corrigé et le fichier `C` n'existe pas. Un auteur travaille essentiellement dans ces fichiers `E` et `C`.
 
 Exemple `Ecp03.tex` et `Ccp03.tex` pour l'exercice numéro 3 portant sur les
 nombres complexes.
 
-Un fichier Latex dont le nom commence par `A` suivi du code d'un thème'
-est une *feuille d'exercice* sur le thème codé .
-Ces fichiers ne devraient pas être édités à la main.
-Ils sont mis à jour par ce script de maintenance puis compilés en pdf.
-Ces pdf sont placés dans *l'espace* de publication.
+Un fichier Latex dont le nom commence par `Aexo_` suivi du titre d'un exercice présente un exercice (éventuellement corrigé) particulier. De tels fichiers ne devraient pas être édités à la main. Ils sont mis à jour par la maintenance puis compilés dans des fichiers html placés dans *l'espace* de publication.
+ 
+Un fichier Latex dont le nom commence par `A` suivi du code d'un thème (sans numéro) est la *feuille d'exercice* sur le thème codé qui rassemble tous les exercices du thème. De tels fichiers ne devraient pas être édités à la main.
+Ils sont mis à jour par la maintenance puis compilés dans des fichiers pdf placés dans *l'espace* de publication.
+
+### Traitement local
 
 
-Un fichier Latex dont le nom commence par `Aexo_` suivi du code d'un thème
-et de 2 chiffres est associé à un un exercice particulier.
-Ces fichiers ne devraient pas être édités à la main.
-Ils sont mis à jour par ce script de maintenance.
-Ces fichiers sont compilés en html, ces html sont placés dans *l'espace* de
- publication.
+### Publication
+
+
+### Contextualisation
 
 Paramètres d'accès
 ------------------
@@ -117,3 +119,97 @@ bdg_connect_data = {}
 
 # paramètres de la maintenance
 para = {'depot': dp_data, 'espace': sp_connect_data, 'bdg': bdg_connect_data}
+
+# nouvelle organisation
+
+execloc = {
+    'relative_path': '../math-exos/',
+    'modulespec': 'exl_mathExos',
+    'commandes': [
+        {'ext': '.tex',
+         'patterns': ['A_*.tex'],
+         'imgdir': 'pdfdir/',
+         'imgext': '.pdf',
+         'command': [
+             "latexmk",
+             "-pdf",
+             "-emulate-aux-dir",
+             "-auxdir=auxdir",
+             "-outdir=pdfdir"
+             ]
+         },
+         {'ext': '.asy',
+          'patterns': ['*_fig.asy'],
+          'imgdir': '',
+          'imgext': '.pdf',
+          'command': [
+              "asy",
+              "-f",
+              "pdf"
+              ]
+          },
+          {'ext': '.py',
+           'patterns': ['*_fig.py'],
+           'imgdir': '',
+           'imgext': '.pdf',
+           'command': [
+               "python3"
+               ]
+           },
+          {'ext': '.tex',
+           'patterns': ['Aexo_*.tex'],
+           'imgdir': 'htmldir/',
+           'imgext': '.html',
+           'command': [
+               'make4ht',
+               '-u',
+               '-d',
+               'htmldir'
+               ]
+           }
+        ],
+    'publish_data': {
+        'patterns': ['pdfdir/A_*.pdf', 'htmldir/*']
+        },
+    'context_data': {
+        }
+    }
+"""
+Dictionnaire présentant les paramètres de traitement local des sources.
+"""
+
+espace = {
+    'credentials': {
+        'region_name': 'fra1',
+        'endpoint_url': 'https://fra1.digitaloceanspaces.com',
+        'bucket': 'maquisdoc-math',
+        'prefix': 'maths-exos/',
+                   },
+        'uri_esp': 'https://maquisdoc-math.fra1.digitaloceanspaces.com/'
+    }
+"""
+Dictionnaire présentant les paramètres du serveur de publication.
+"""
+
+context = {
+    'credentials': {
+        'URI': os.getenv('NEO4J_URL'),
+        'user': os.getenv('NEO4J_USERNAME'),
+        'password': os.getenv('NEO4J_PASSWORD')
+        },
+    'modulespec': 'bdg_mathExos'
+    }
+"""
+Dictionnaire présentant les paramètres du serveur de contextualisation.
+"""
+
+data = {'nom': 'math-exos',
+        'execloc': execloc,
+        'espace': espace,
+        'context': context}
+"""
+Dictionnaire présentant tous les paramètres du dépôt.
+"""
+
+
+
