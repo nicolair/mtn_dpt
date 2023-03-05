@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Contextualisation du dépôt de problèmes.
+La contextualisation du dépôt de problèmes consiste à s'assurer que la base en graphe reflète les problèmes et leurs méta-données locales. Ces méta-données sont définies par l'auteur c'est à dire écrites dans le dépôt local. La modification d'une méta-donnée de ce type se fait dans le dépôt et non dans la base en graphe..
 
-Modifié le 13/02/23 @author: remy
+Modifié le 05/03/23 @author: remy
 
-Elle consiste à s'assurer que la base en graphe reflète les problèmes et leurs méta-données. Ces méta-données sont définies par l'auteur c'est à dire écrites dans le dépôt local. La modification d'une méta-donnée de ce type se fait dans le dépôt et non dans la base en graphe.
+La fonction `exec()` est appelée lors de l'instanciation de la classe `Maquis`. Elle maintient cette cohérence en exécutant des requêtes cypher.
+
 
 Quelles sont les méta-données définies par l'auteur d'un problème?
 - une description
@@ -57,27 +58,34 @@ Les index sont définis dans la source LateX par la commande `\index`. Lors de l
 Si on considère l'arête dans l'autre sens c'est à dire pointant de l'index vers le problème, un index apparait comme un mot-clé.  
 Un mot-clé défini par un utilisateur sera défini avec une arète dont la source est le noeud représentant le mot et dont la cible est le noeud représentant le problème. Cette fonctionnalité n'est pas encore implémentée et les labels du noeud représentant le mot et de l'arête ne sont pas fixés. 
 
-La fonction `exec()` exécute les tâches spécifiques complémentaires. Elle est appelée lors de l'instanciation de la classe `Maquis`.
-
-Tâches de `exec()`
-
-- Récupération des données spécifiques
-  - descriptions
-  - index
-
 """
 import neo4j
 
-def exec(self,data):
+def exec(self):
+    """
+    Exécution des requêtes spécifques de maintenance.
+    - récupération des descriptions dans la base 
+    - supprimer dans la base les problèmes absents localement
+    - créer dans la base les problèmes locaux manquants
+    - si description locale et distante différentes,
+        - copier description locale sur distante
+    - afficher les indexations locales
+
+    #### Renvoie
+
+    log: str journal
+
+    """
     print("coucou de exec() dans bdg_mathPbs.py")
     
+    data = self.connect_data
     URI = data['credentials']['URI']
     user = data['credentials']['user']
     password = data['credentials']['password']
     AUTH = (user, password)
     
-    loc_indexations = self.loc_indexations
-    loc_descriptions = self.loc_descriptions
+    loc_indexations = self.specific_results['indexations']
+    loc_descriptions = self.specific_results['descriptions']
 
     param = {'label' : "Document", 
              'propsF' :"{typeDoc:'problème'}", 

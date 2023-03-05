@@ -1,7 +1,7 @@
 """
-Ce module code le manifeste du dépôt `math-pbs`. 
+Ce module code et présente le *manifeste* du dépôt `math-pbs`. 
 
-Modifié le 17/02/23 @author: remy
+Modifié le 04/03/23 @author: remy
 
 Le manifeste d'un dépôt décrit
 - les conventions de nommage des fichiers permettant leur traitement local avant publication et contextualisation,
@@ -10,11 +10,11 @@ Le manifeste d'un dépôt décrit
 - les données du serveur de contextualisation spécifique au dépôt.
 
 
-Ce module définit un dictionnaire `data`.
-- `data['nom']` présente le nom du dépôt : 'math-pbs'
-- `data['execloc']` présente les paramètre de traitement local
-- `data['espace']` présente les paramètres de publication
-- `data['context']` présente les paramètres de contextualisation
+Ce module définit un dictionnaire nommé `manifeste`.
+- `manifeste['nom']` présente le nom du dépôt : 'math-pbs'
+- `manifeste['execloc']` présente les paramètre de traitement local
+- `manifeste['espace']` présente les paramètres de publication
+- `manifeste['context']` présente les paramètres de contextualisation
 
 ### Conventions de nommage
 
@@ -113,72 +113,6 @@ Les credentials secrets sont définis dans les variables d'environnement `NEO4J_
 """
 
 import os
-"""
-ancienne version obsolète
-# fichiers à compiler localement
-execloc_data = [
-    {'ext': '.tex', 'patterns': ['A*.tex'],
-     'imgdir': 'pdfdir/', 'imgext': '.pdf',
-     'command': ["latexmk", "-pdf", "-emulate-aux-dir",
-                 "-auxdir=auxdir", "-outdir=pdfdir"]},
-    {'ext': '.asy', 'patterns': ['*_fig.asy'],
-     'imgdir': '', 'imgext': '.pdf',
-     'command': ["asy", "-f", "pdf"]},
-    {'ext': '.py', 'patterns': ['*_fig.py'],
-     'imgdir': '', 'imgext': '.pdf',
-     'command': ["python3"]},
-    ]
-
-# modules spécifiques
-execloc_module = 'exl_mathPbs'
-bdg_module = 'bdg_mathPbs'
-
-# publish_data : fichiers à publier
-publish_data = {
-    'patterns': ['pdfdir/A*.pdf'],
-    'uri_esp': 'https://maquisdoc-math.fra1.digitaloceanspaces.com/'}
-
-# context_data ; données locales et url base en graphe
-context_data = {
-    'idx_path_pattern': 'auxdir/A*.idx',
-    'description': {
-        'path_pattern': 'E*.tex',
-        'tags': ['%<dscrpt>', '</dscrpt>']
-        }
-}
-
-# dp pour dépôt
-dp_data = {'nom': 'math-pbs',
-           'relative_path': '../math-pbs/',
-           'execloc_module': execloc_module,
-           'execloc_data': execloc_data,
-           'publish_data': publish_data,
-           'context_data': context_data}
-
-#       paramètres de connexion à l'espace (de publication web)
-sp_connect_data = {'region_name': 'fra1',
-                   'endpoint_url': 'https://fra1.digitaloceanspaces.com',
-                   'bucket': 'maquisdoc-math',
-                   'prefix': 'maths-pbs/',
-                   'mathPbs_key': 'DO00XUCXPTZGPNNVDW7W',
-                   'secret': '+u8PpUIAlnsnTXpXImJNeqmqSvOzYGzr2iS+qhMRSO0',
-                   'aws_access_key_id': os.getenv('DO_SPACES_KEY'),
-                   'aws_secret_access_key': os.getenv('DO_SPACES_SECRET')
-                   }
-# certains des paramètres du dessus sont inutiles car ~/.aws/credentials prime.
-# À METTRE À JOUR
-
-#      paramètres de connexion à la base de données en graphe
-bdg_connect_data = {'URI': os.getenv('NEO4J_URL'),
-                    'user': os.getenv('NEO4J_USERNAME'),
-                    'password': os.getenv('NEO4J_PASSWORD')}
-
-
-# paramètres de la maintenance
-para = {'depot': dp_data,
-        'espace': sp_connect_data,
-        'bdg': bdg_connect_data}
-"""
 
 # Nouvelle organisation
 execloc = {
@@ -223,9 +157,6 @@ execloc = {
             }
         }
     }
-"""
-Dictionnaire présentant les paramètres de traitement local des sources.
-"""
 
 espace = {
     'credentials': {
@@ -236,9 +167,6 @@ espace = {
                    },
     'uri_esp': 'https://maquisdoc-math.fra1.digitaloceanspaces.com/'
     }
-"""
-Dictionnaire présentant les paramètres du serveur de publication.
-"""
 
 context = {
     'credentials': {
@@ -248,14 +176,8 @@ context = {
         },
     'modulespec': 'bdg_mathPbs'
     }
-"""
-Dictionnaire présentant les paramètres du serveur de contextualisation.
-"""
 
-data = {'nom': 'math-pbs',
-        'execloc': execloc,
-        'espace': espace,
-        'context': context}
-"""
-Dictionnaire présentant tous les paramètres du dépôt.
-"""
+manifeste = {'nom': 'math-pbs',
+             'execloc': execloc,
+             'espace': espace,
+             'context': context}

@@ -7,7 +7,7 @@ Modifié le 06/01/23  @author: remy
   - Importe [`init_mathExos`](init_mathExos.html) qui code le *manifeste*
   du dépôt.
   - Importe [`depot`](depot.html) qui définit la classe `Depot`.
-  - Instancie une classe `Depot` ce qui effectue la maintenance.
+  - Instancie un objet `Depot` ce qui effectue la maintenance.
   - Affiche la propriété `.journal` de l'objet `Depot`.
 
 
@@ -22,7 +22,7 @@ if __name__ == '__main__':
     journal = {}
 
     # INSTANCIATION d'un objet Depot
-    dp = depot.Depot(init_DPT.para)
+    dp = depot.Depot(init_DPT.manifeste)
     journal = dp.log
 
     print(journal)

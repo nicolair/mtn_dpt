@@ -17,7 +17,7 @@ if __name__ == '__main__':
     journal = {}
 
     #                        INSTANCIATION d'un objet Depot
-    dp = depot.Depot(init_DPT.data)
+    dp = depot.Depot(init_DPT.manifeste)
     journal = dp.log
 
     print(journal)

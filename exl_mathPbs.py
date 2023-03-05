@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*- 
 """
-Module de scripts (à exécuter localement) spécifiques au dépôt de problèmes et complétant les commandes définies dans le manifeste.
+Traitement local spécifique des fichiers du dépôt `mathPbs` et complétant les compilations définies dans le manifeste.
 
-Modifié le 09/02/23 @author: remy
+Modifié le 04/03/23 @author: remy
 
+Ce module est importé par l'instanciation de l'objet `Execlocal`.  
+Traitements exécutés par la fonction `exec()` du module:
 
-La fonction `exec()` exécute les tâches spécifiques complémentaires. Elle est appelée lors de l'instanciation de la classe `Execlocal`.
-
-Pour le moment aucun script complémentaire n'est nécessaire. La fonction `exec()` renvoie seulement une ligne dans le journal indiquant la prise en compte de ce module.
+- extraction de la liste des descriptions
+- extraction de la liste des indexations 
 
 J'envisage d'automatiser la création des fichiers `A` à partir des énoncés`E`. Pour le moment, ils sont créés à la main.  
 Pour cette hypothétique automatisation, il faudrait:
@@ -26,17 +27,38 @@ import scantex
 dp_data = {}
 dp_data['relative_path'] = '../math-pbs/'
 relpath = '../math-pbs/'
-lineprefix = "\n \t \t"
+lineprefix = "\n \t \t \t"
 
-def exec():
+def exec(data):
     """
-    Complète le journal.
+    Exécute les traitements spécifiques et complète le journal.
 
-    Returns
-    -------
-    log : TYPE str
-        DESCRIPTION journal de l'exécution des scripts.
+    #### Paramètres
+    `data`: données d'exécution locale, valeur de `execloc` dans le dictionnaire `manifeste` défini par le module d'initialisation [`init_mathPbs`](init_mathPbs.html).
+
+
+    #### Renvoie
+    
+    TYPE : dictionnaire
+
+        `log`: journal de l'exécution des scripts
+        `specific_results`: dictionnaire
+            `indexations`: liste d'indexations
+            `descriptions`: liste de descriptions
 
     """
     log = lineprefix + 'Scripts du module spécifique (fonction exec())'
-    return log
+    
+    # renseigne la propriété .indexations
+    idx_path_pattern = data['context_data']['idx_path_pattern']
+    indexations = scantex.get_liste_indexations(idx_path_pattern)
+    log += lineprefix + str(len(indexations)) + " indexations \n"
+    
+    # renseigne la propriété .descriptions
+    description_pattern = data['context_data']['description']
+    descriptions = scantex.get_liste_descriptions(description_pattern)
+    log += lineprefix + str(len(descriptions)) + " descriptions \n"
+    
+    specific_results = {'indexations': indexations, 'descriptions': descriptions}
+    
+    return {'log': log, 'specific_results': specific_results}

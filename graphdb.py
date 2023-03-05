@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Interface avec la partie de la base de données en graphe reflétant le dépôt.
-Modifié le 15/02/23   @author: remy
+
+Modifié le 05/03/23   @author: remy
 
 - Définit des outils utiles pour tous les dépôts
 - Importe le sous-module `bdg_xxxx` spécifique au dépôt sous le nom `specific`.
@@ -10,6 +11,8 @@ Modifié le 15/02/23   @author: remy
 La maintenance de la base est réalisée par des requêtes cypher définies
  dans `specific` et exécutés lors de l'instanciation de la classe `Maquis`
  par l'appel `specific.exec()`.
+ 
+Les sous-modules spécifiques sont [`bdg_mathPbs`](bdg_mathPbs.html) et [`bdg_mathExos`](bdg_mathExos.html)
 
 """
 import importlib
@@ -19,24 +22,33 @@ import importlib
 class Maquis:
     """
     Classe Maquis. Interface la base de données neo4j.
+    - exécute les requêtes de mise à jour de la partie de la base associée au dépôt.
+    - présente dans la propriété `.log` le journal de l'exécution des requêtes.
 
-    connect_data est obsolète.
     """
 
-    def __init__(self, data, loc_indexations, loc_descriptions):
+    def __init__(self, data, specific_results):
         """
-        Instanciate.
+        Instancie la classe
 
         #### Paramètres
-
+        - data : dictionnaire `manifeste['context']` du module d'Initialisation.
+    
+        - specific_results : dictionnaire de données de contextalisation extraites du dépôt par le module d'exécution locale spécifique.
+    
+        #### Propriétés
+        - `.log` : journal
+        - `.connect_data` : `manifeste['context']` données de connexion.
+        - `.specific_results` : données extraites du dépot par l'exécution locale spécifique
+    
         #### Renvoie
 
         None.
 
         """
+        self.connect_data = data
+        self.specific_results = specific_results
         self.log = "\t Initialisation de la classe Maquis \n"
-        self.loc_indexations = loc_indexations
-        self.loc_descriptions = loc_descriptions
 
         print("coucou du module graphdb")
 
@@ -49,8 +61,8 @@ class Maquis:
                 specific = importlib.import_module(module)
                 self.log += lineprefix
                 self.log += "Importation du module spécifique " + module
-                # execécution des scripts de contextualisation
-                self.log += specific.exec(self, data)
+                # exécution des scripts de contextualisation
+                self.log += specific.exec(self)
             except ImportError as error:
                 self.log += lineprefix + "Module " + error.name + " pas trouvé"
 

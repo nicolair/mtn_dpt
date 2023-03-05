@@ -164,6 +164,7 @@ __all__ = [
     "exl_mathExos",
     "exl_mathPbs",
     "bdg_mathPbs",
+    "bdg_mathExos",
     "depot",
     "execlocal",
     "scantex",

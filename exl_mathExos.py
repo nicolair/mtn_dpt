@@ -21,7 +21,7 @@ relpath = '../math-exos/'
 lineprefix = "\n \t \t"
 
 
-def exec():
+def exec(data):
     """
     Forme les exos individuels et les feuilles d'exos LateX.
 
@@ -54,7 +54,7 @@ def exec():
             if aecrireAexo(nomexo):
                 log += ecritAexo(nomexo)
 
-    return log
+    return {'log': log , 'specific_results': {} }
 
 
 def ecritFeuilleA(code, dscrpt):

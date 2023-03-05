@@ -1,29 +1,33 @@
 # -*- coding: utf-8 -*-
 """
-Interface avec le dossier local du dépôt. Exécute localement les scripts de
- maintenance des sources d'un dépôt.
+Exécute localement les scripts préliminaires à la publication et à la contextualisation des sources d'un dépôt.
 
-Modifié le 14/02/23 @author: remy
+Modifié le 03/03/23 @author: remy
 
+Traitements à effectuer sur les fichiers d'un dépôt : 
+
+- créer-modifier les sources avant compilation
+- compiler
+- établir des listes de fichiers images à publier
+- établir des listes de données à contextualiser
+
+Le module `execlocal`
 - Importe le sous-module [`scantex`](scantex.html) d'examen des fichiers LateX.
 - Définit la classe `Execlocal`.
 
-L'instanciation d'un objet `Execlocal` traite les fichiers sources.
+Les traitements sont effectués lors de l'instanciation d'un objet `Execlocal`. Cette instanciation importe un module spécifique au dépôt.  
+Actuellement, les sous-modules spécifiques sont 
+[`exl_mathExos`](exl_mathExos.html) et 
+[`exl_mathPbs`](exl_mathPbs.html).
 
-Le traitement des fichiers sources (LateX, ...) consiste en :
+Les commandes de compilation sont codées dans le fichier `init` (manifeste) du dépôt. Elles sont lancées par la méthode `compil()` de la classe `Execlocal`. Les autres traitements sont définis dans la fonction `exec()` du sous-module spécifique.
 
-  - création-modification des sources avec un sous-module *spécifique*
-  - compilation des sources vers les fichiers publiables.
-  - examen des fichiers .idx d'index constitués lors de la compilation
+Principales propriétés d'un objet `Execlocal` :
 
-Un objet `Execlocal`  présente
+- `.log`: journal de l'exécution locale
+- `.publiables`: liste des fichiers publiables
+- `.specific_results`: dictionnaire présentant des données spécifiques au dépôt.
 
-- la liste des fichiers publiables dans la propriété `.publiables`.
-- la liste des indexations dans la propriété `.indexations`.
-
-Sous-modules spécifiques pour les dépôts actuels:
-[`exl_mathExos`](exl_mathExos.html)
-[`exl_mathPbs`](exl_mathPbs.html)
 
 """
 import importlib
@@ -44,15 +48,15 @@ class Execlocal:
         - récupère les paramètres du dépôt
         - initialise la propriété journal (`.log`)
         - importe le module spécifique au dépôt
-        - exécute
-            - scripts python spécifiques maj fichiers LateX
-            - commandes de compilation
-        - renseigne la propriété `.publiables`
-        - renseigne la propriété `.indexations`
+        - exécute les traitements spécifiques
+            - renseigne  `.specific_results`
+        - exécute les commandes de compilation
+            - renseigne `.publiables`
+        
 
         #### Parametres
 
-        depot_data :
+        data :
 
         - TYPE dictionnaire
         - DESCRIPTION   codage du *manifeste* du dépôt
@@ -75,13 +79,9 @@ class Execlocal:
         TYPE chaine de caractères.
         """
 
-        # self.execloc_data = depot_data['depot']['execloc_data']
         self.commandes = data['commandes']
-        # self.rel_path = depot_data['depot']['relative_path']
         self.rel_path = data['relative_path']
-        #self.publish_data = depot_data['depot']['publish_data']
         self.publish_data = data['publish_data']
-        #self.context_data = depot_data['depot']['context_data']
         self.context_data = data['context_data']
 
         # change de répertoire
@@ -89,15 +89,16 @@ class Execlocal:
         os.chdir(self.rel_path)
 
         # importation du module spécifique
-        # module = depot_data['depot']['execloc_module']
         module = data['modulespec']
         if module:
             try:
                 specific = importlib.import_module(module)
                 self.log += lineprefix
                 self.log += "Importation du module spécifique " + module
-                # maintenance des fichiers LateX
-                self.log += specific.exec()
+                # maintenance spécifique
+                truc = specific.exec(data)
+                self.log += truc['log'] 
+                self.specific_results = truc['specific_results']
             except ImportError as error:
                 self.log += lineprefix + "Module " + error.name + " pas trouvé"
 
@@ -113,16 +114,6 @@ class Execlocal:
         # renseigne la propriété .publiables
         self.publiables = self.apublierImg()
         # fichiers publiables dict path: date
-
-        # renseigne la propriété .indexations
-        idx_path_pattern = self.context_data['idx_path_pattern']
-        self.indexations = scantex.get_liste_indexations(idx_path_pattern)
-        self.log += lineprefix + str(len(self.indexations)) + " indexations \n"
-
-        # renseigne la propriété .description
-        description_pattern = self.context_data['description']
-        self.descriptions = scantex.get_liste_descriptions(description_pattern)
-        self.log += lineprefix + str(len(self.descriptions)) + " descriptions \n"
 
         # retour au répertoire de base
         os.chdir(maintenance_path)
