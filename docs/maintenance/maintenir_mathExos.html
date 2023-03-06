@@ -50,7 +50,7 @@
 <li>Importe <a href="init_mathExos.html"><code>init_mathExos</code></a> qui code le <em>manifeste</em>
 du dépôt.</li>
 <li>Importe <a href="depot.html"><code>depot</code></a> qui définit la classe <code>Depot</code>.</li>
-<li>Instancie une classe <code>Depot</code> ce qui effectue la maintenance.</li>
+<li>Instancie un objet <code>Depot</code> ce qui effectue la maintenance.</li>
 <li>Affiche la propriété <code>.journal</code> de l'objet <code>Depot</code>.</li>
 </ul>
 
@@ -71,7 +71,7 @@ d'un dépôt.</p>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="sd">  - Importe [`init_mathExos`](init_mathExos.html) qui code le *manifeste*</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">  du dépôt.</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">  - Importe [`depot`](depot.html) qui définit la classe `Depot`.</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">  - Instancie une classe `Depot` ce qui effectue la maintenance.</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">  - Instancie un objet `Depot` ce qui effectue la maintenance.</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">  - Affiche la propriété `.journal` de l&#39;objet `Depot`.</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
@@ -86,7 +86,7 @@ d'un dépôt.</p>
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="n">journal</span> <span class="o">=</span> <span class="p">{}</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="c1"># INSTANCIATION d&#39;un objet Depot</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="n">dp</span> <span class="o">=</span> <span class="n">depot</span><span class="o">.</span><span class="n">Depot</span><span class="p">(</span><span class="n">init_DPT</span><span class="o">.</span><span class="n">para</span><span class="p">)</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="n">dp</span> <span class="o">=</span> <span class="n">depot</span><span class="o">.</span><span class="n">Depot</span><span class="p">(</span><span class="n">init_DPT</span><span class="o">.</span><span class="n">manifeste</span><span class="p">)</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="n">journal</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">log</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>
 </span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="nb">print</span><span class="p">(</span><span class="n">journal</span><span class="p">)</span>

@@ -37,7 +37,7 @@ brève description. Les premières lignes sont reproduites au dessous :
     co;coniques
     cp;nombres complexes
 
-Les noms des fichiers LateX caractérisant un exercice est formé à partir de son titre: précédé par `E` pour l'énoncé et par `C` pour le corrigé. Parfois l'exercice n'est pas encore corrigé et le fichier `C` n'existe pas. Un auteur travaille essentiellement dans ces fichiers `E` et `C`.
+Les noms des fichiers LateX caractérisant un exercice sont formés à partir de son titre: précédé par `E` pour l'énoncé et par `C` pour le corrigé. Parfois l'exercice n'est pas encore corrigé et le fichier `C` n'existe pas. Un auteur travaille essentiellement dans ces fichiers `E` et `C`.
 
 Exemple `Ecp03.tex` et `Ccp03.tex` pour l'exercice numéro 3 portant sur les
 nombres complexes.
@@ -49,9 +49,15 @@ Ils sont mis à jour par la maintenance puis compilés dans des fichiers pdf pla
 
 ### Traitement local
 
-- Avant publication
-
+- Avant compilation
+    - mise à jour des fichiers LateX d'exercices individuels `Aexo_`
+    - mise à jour des fichiers Latex de feuille par thème `A`
+    
 - Avant contextualisation
+
+- Compilation
+
+- Avant publication
 
 ### Publication
 
@@ -62,6 +68,31 @@ Les credentials secrets sont définis dans le fichier local `~/.aws`.
 
 
 ### Contextualisation
+
+#### Noeuds
+
+Les noeuds attachés au dépôt d'exercices sont de plusieurs types. Pour chaque type, on indique un exemple de requête cypher renvoyant un unique noeud.
+
+- Noeud (`Document`) associé à un exercice particulier caractérisé par son titre
+    
+        MATCH (e:Document {typeDoc:"exercice", titre:"dt23"}) RETURN e
+
+- Noeud (`Document`) associé à une feuille d'exercices caractérisée par son titre
+    
+        MATCH (f:Document {typeDoc:"liste exercices", titre:"Déterminants"}) RETURN f
+    Le titre est associé au code du thème par le fichier `_codes.csv`.
+
+- Noeud (`Concept`) associé à un thème d'exercices caractérisé par son littéral
+    
+        MATCH (c:Concept {litteral:"Déterminants"}) RETURN c
+    Le littéral est associé au code du thème par le fichier `_codes.csv`.
+    
+#### Arêtes
+
+- Arête (`CONTIENT`) entre une feuille et un exercice
+- Arête (`EVALUE`) entre un exercice et le concept de son thème
+- Arête (`EVALUE`) entre une feuille et le concept de son thème
+
 
 Voir les sous modules [`graphdb`](graphdb.html), [`bdg_mathExos`](bdg_mathExos.html) pour la mise en oeuvre de la contextualisation.
 
