@@ -4,7 +4,7 @@ Outils d'analyse de fichiers sources ou produits par LateX.
 
 Modifié le 22/01/23  @author: remy
 
-Travaille dans le répertoire courant c'est à dire celui du dépôt à maintenir.'
+Travaille dans le répertoire courant c'est à dire celui du dépôt à maintenir.
 """
 import os
 import glob
@@ -182,17 +182,21 @@ def get_liste_indexations(path_pattern):
     """
     
     indexations = []
-    idxpaths = glob.glob("auxdir/A*.idx")
+    idxpaths = glob.glob(path_pattern)
     for idxpath in idxpaths:
         doc = os.path.basename(idxpath)
-        doc = doc.removeprefix('A')
+        #doc = doc.removeprefix('A')
         doc = doc.removesuffix(('.idx'))
         f = open(idxpath)
         for line in f:
-            line = line.removeprefix('\\indexentry{')
-            i = line.find('|hyperpage')
-            line = line[0:i]
-            indexations.append([doc,line])
+            if '\\indexentry{' in line:
+                line = line.removeprefix('\\indexentry{')
+                if '|hyperpage' in line :
+                    i = line.find('|hyperpage')
+                else:
+                    i = line.find('}')
+                line = line[0:i]
+                indexations.append([doc,line])
         f.close()
     # print(indexations)
     return indexations

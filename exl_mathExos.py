@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Module de scripts (à exécuter localement) spécifiques au dépôt d'exercices et complétant les commandes définies dans le manifeste..
+Module de scripts (à exécuter localement) spécifiques au dépôt d'exercices et complétant les commandes définies dans le manifeste.
 
-Modifié le 09/02/23 @author: remy
+Modifié le 15/03/23 @author: remy
 
-La fonction `exec()` exécute les tâches spécifiques complémentaires. Elle est appelée lors de l'instanciation de la classe `Execlocal`.
+Ce module est importé par l'instanciation de l'objet `Execlocal`.
+Les traitements sont exécutés par la fonction `exec()` du module.
 
 """
 import csv
@@ -23,24 +24,34 @@ lineprefix = "\n \t \t"
 
 def exec(data):
     """
-    Forme les exos individuels et les feuilles d'exos LateX.
+    Exécute les traitements spécifiques et complète le journal.
 
-    - Lit les thèmes depuis le fichier `_codes.csv`
-    - Pour chaque thème, forme le fichier LateX `A_`
-    - Pour chaque exercice, forme le fichier LateX `Aexo_`
-    - Renvoie un journal de l'exécution
+    - Forme les exos individuels et les feuilles d'exos LateX.
+        - Lit les thèmes depuis le fichier `_codes.csv`
+        - Pour chaque thème, forme le fichier LateX `A_`
+        - Pour chaque exercice, forme le fichier LateX `Aexo_`
+    - Extrait la liste des indexations
 
+    #### Paramètres
+    `data`: données d'exécution locale, valeur de `execloc` dans le dictionnaire `manifeste` défini par le module d'initialisation [`init_mathExos`](init_mathExos.html).
 
-    Returns
-    -------
-    log : TYPE str
-        DESCRIPTION journal de l'exécution des scripts.
+    #### Renvoie
+
+    TYPE : dictionnaire
+
+        `log`: journal de l'exécution des scripts
+        `specific_results`: dictionnaire
+            `listeExos`: dictionnaire clé= code thème, valeur = liste exos
+            `themes`: dictionnaire clé= code thème, valeur = littéral du thème
 
     """
     log = lineprefix + 'Scripts du module spécifique (fonction exec())'
+    specific_results = {}
 
     # Feuilles par thèmes
     theme = getThemes()
+    specific_results['themes'] = theme
+
     log += '\n \t\t\t Création modification des feuilles LateX'
     for code in theme:
         if aecrirefeuilleA(code):
@@ -53,8 +64,15 @@ def exec(data):
         for nomexo in lili[theme]:
             if aecrireAexo(nomexo):
                 log += ecritAexo(nomexo)
+    specific_results['listeExos'] = lili
 
-    return {'log': log , 'specific_results': {} }
+    # renseigne la propriété .indexations
+    idx_path_pattern = data['context_data']['idx_path_pattern']
+    indexations = scantex.get_liste_indexations(idx_path_pattern)
+    log += lineprefix + str(len(indexations)) + " indexations \n"
+    specific_results['indexations'] = indexations
+
+    return {'log': log , 'specific_results': specific_results }
 
 
 def ecritFeuilleA(code, dscrpt):
@@ -65,15 +83,15 @@ def ecritFeuilleA(code, dscrpt):
         - création ou maj feuille d'exos Latex d'un thème
 
 
-    Parameters
-    ----------
+    #### Parametres
+
     code : TYPE str
         DESCRIPTION code du thème dans le fichier `_code.csv`.
     dscrpt : TYPE str
         DESCRIPTION description du thème dans le fichier `_code.csv`.
 
-    Returns
-    -------
+    #### Renvoie
+
     log : TYPE str
         DESCRIPTION journal de l'exécution.
 
@@ -128,17 +146,18 @@ def aecrirefeuilleA(code):
 
     VRAI si le fichier LateX "A" du thème doit être créé ou modifié
     c'est à dire si
-        - le fichier "A" n'existe pas
-        ou
-        - la liste des fichiers "E" ou "C" n'est pas dans celle des input
 
-    Parameters
-    ----------
+    - le fichier "A" n'existe pas
+        ou
+    - la liste des fichiers "E" ou "C" n'est pas dans celle des input
+
+    #### Parametres
+
     code : TYPE str
         DESCRIPTION code du theme.
 
-    Returns
-    -------
+    #### Renvoie
+
     bool.
 
     """
@@ -158,17 +177,19 @@ def aecrireAexo(nomexo):
     """
     Renvoie VRAI si le fichier "Aexo" de l'exercice doit être créé
     ou modifié. C'est à dire si :
-        - le fichier "Aexo_" n'existe pas'
+
+    - le fichier "Aexo_" n'existe pas'
         ou
-        - le fichier "Aexo_" ne contient pas de corrigé alors qu'il existe
+    - le fichier "Aexo_" ne contient pas de corrigé alors qu'il existe
         un fichier "C".
-    Parameters
-    ----------
+
+    #### Parametres
+
     nomexo : TYPE str
         DESCRIPTION nom du fichier "E" d'un exercice.
 
-    Returns
-    -------
+    #### Renvoie
+
     TYPE bool
 
     """
@@ -194,14 +215,14 @@ def ecritAexo(nomexo):
     et l'écrit dans le dépôt.
 
 
-    Parameters
-    ----------
+    #### Parametres
+
     nomexo :
         TYPE str
         DESCRIPTION  nom du fichier de l'exercice (énoncé).
 
-    Returns
-    -------
+    #### Renvoie
+
     None ou le nom du fichier Aexo modifié.
 
     """
@@ -241,14 +262,14 @@ def listeExosTheme(code):
     """
     Renvoie la liste des exos du theme codé
 
-    Parameters
-    ----------
+    #### Parametres
+
     code:
         TYPE str
         DESCRIPTION le code d'un thème
 
-    Returns
-    -------
+    #### Renvoie
+
     liste de chemins de fichier Latex d'énoncé
     """
     exos_list = glob.glob(relpath + 'E' + code + '*.tex')
@@ -260,14 +281,14 @@ def listeExosCorrTheme(code):
     """
     Renvoie la liste des exos corrigés du theme codé
 
-    Parameters
-    ----------
+    #### Parametres
+
     code:
         TYPE str
         DESCRIPTION le code d'un thème
 
-    Returns
-    -------
+    #### Renvoie
+
     liste de chemins de fichiers Latex de corrigés
     """
     exos_list = glob.glob(relpath + 'C' + code + '*.tex')
@@ -279,8 +300,8 @@ def getThemes():
     """
     Lit les thèmes depuis le fichier _codes.csv
 
-    Returns
-    -------
+    #### Renvoie
+
     dictThemes : TYPE dict
         DESCRIPTION key=code, val=description.
 
@@ -297,8 +318,8 @@ def getThemes():
 def listeExos():
     """
 
-    Returns
-    -------
+    #### Renvoie
+
     dictionnaire
         - clé = code d'un thème
         - valeur = liste des noms des fichiers d'énoncé
@@ -323,8 +344,8 @@ def listeExos():
 def listeCorriges():
     """
 
-    Returns
-    -------
+    #### Renvoie
+
     dictionnaire
         - clé = code d'un thème
         - valeur = liste des noms des fichiers d'énoncé
@@ -349,8 +370,8 @@ def listeCorriges():
 def listeExosNoncorr():
     """
 
-    Returns
-    -------
+    #### Renvoie
+
     dictionnaire des exercices (énoncés) non corrigés
         - clé = code d'un thème
         - valeur = liste des noms des fichiers d'énoncé
@@ -374,8 +395,8 @@ def ecritTousAexos():
     """
     Écrit tous les "Aexos_" dans le dépôt. Ne doit être utilisé qu'une fois
 
-    Returns
-    -------
+    #### Renvoie
+
     None.
 
     """
@@ -389,8 +410,8 @@ def listeAexosNoncorr():
     """
     Liste des enoncés dont le "Aexo_" ne contient pas de corrigé.
 
-    Returns
-    -------
+    #### Renvoie
+
     None.
 
     """
@@ -416,8 +437,8 @@ def modifTousAexos():
     C'est à dire ceux qui contiennent "pas encore de corrigé" alors
     qu'un corrigé existe.
 
-    Returns
-    -------
+    #### Renvoie
+
     None.
 
     """

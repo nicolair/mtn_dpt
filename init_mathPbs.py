@@ -1,7 +1,7 @@
 """
 Ce module code et présente le *manifeste* du dépôt `math-pbs`. 
 
-Modifié le 04/03/23 @author: remy
+Modifié le 09/03/23 @author: remy
 
 Le manifeste d'un dépôt décrit
 - les conventions de nommage des fichiers permettant leur traitement local avant publication et contextualisation,
@@ -109,6 +109,11 @@ Voir les sous modules [`graphdb`](graphdb.html), [`bdg_mathPbs`](bdg_mathPbs.htm
 
 Ce sous-module ne définit en clair que les paramètres publics du serveur de contextualisation.
 Les credentials secrets sont définis dans les variables d'environnement `NEO4J_URL` et `NEO4J_PASSWORD`.
+
+### Scénarios de travail admissibles
+- suppression d'un problème
+- création d'un problème
+- modification; texte, description, index
 
 """
 

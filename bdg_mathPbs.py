@@ -7,7 +7,6 @@ Modifié le 05/03/23 @author: remy
 
 La fonction `exec()` est appelée lors de l'instanciation de la classe `Maquis`. Elle maintient cette cohérence en exécutant des requêtes cypher.
 
-
 Quelles sont les méta-données définies par l'auteur d'un problème?
 - une description
 - des index
@@ -63,7 +62,7 @@ import neo4j
 
 def exec(self):
     """
-    Exécution des requêtes spécifques de maintenance.
+    Exécution des requêtes spécifques de maintenance de la base.
     - récupération des descriptions dans la base 
     - supprimer dans la base les problèmes absents localement
     - créer dans la base les problèmes locaux manquants
@@ -100,8 +99,8 @@ def exec(self):
     # Nbs de problèmes
     blabla = "Nbs de pbs. local: {nloc},  base: {nrem}"
     blabla = blabla.format(
-    nloc=len(loc_descriptions),
-    nrem=len(rem_descriptions))
+        nloc=len(loc_descriptions),
+        nrem=len(rem_descriptions))
     print(blabla)
 
     # Noeuds isolés (orphelins)
@@ -125,7 +124,7 @@ def exec(self):
             val = session.execute_write(self.do_cypher_tx, req)
         print(val)
 
-
+    # Problèmes sans noeud associé
     loc_orphs = []
     for nom in nomsL:
         if nom not in nomsR:
@@ -167,7 +166,7 @@ def exec(self):
                 val = session.execute_write(self.do_cypher_tx, req)
                 print(val)
 
-    # index
+    # indexations
     print("\n Indexations locales")
     print(loc_indexations)
 

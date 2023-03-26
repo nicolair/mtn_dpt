@@ -2,7 +2,7 @@
 """
 Module d'interface avec un espace.
 
-Modifié le 13/01/23  @author: nicolair
+Modifié le 12/03/23  @author: nicolair
 
 Un "espace" est un service de stockage analogue au s3 de Amazon mais proposé
 par DigitalOcean. Ce module définit la classe `Espace`. Une instanciation de
@@ -26,11 +26,12 @@ class Espace:
         Initialise la classe et met à jour l'espace.
 
         Pour les fichiers publiables cad ceux de "apublier_data":
-            - récupère les clés associées et leur timestamp dans l'espace
-            - si le fichier local est plus récent:
+
+        - récupère les clés associées et leur timestamp dans l'espace
+        - si le fichier local est plus récent:
                       upload sur l'espace
         #### Paramètres:
-        - connect_data: dictionnaire codant les données de connexion. Exemple :
+        - data = `manifeste['espace']: dictionnaire codant les données de connexion. Exemple :
         
                 {
                     "region_name" : "fra1",

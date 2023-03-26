@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*- 
 """
-Traitement local spécifique des fichiers du dépôt `mathPbs` et complétant les compilations définies dans le manifeste.
+Module de scripts (à exécuter localement) spécifiques au dépôt d'exercices et complétant les commandes définies dans le manifeste.
 
-Modifié le 04/03/23 @author: remy
+Modifié le 15/03/23 @author: remy
 
 Ce module est importé par l'instanciation de l'objet `Execlocal`.  
-Traitements exécutés par la fonction `exec()` du module:
-
-- extraction de la liste des descriptions
-- extraction de la liste des indexations 
+Les traitements sont exécutés par la fonction `exec()` du module.
 
 J'envisage d'automatiser la création des fichiers `A` à partir des énoncés`E`. Pour le moment, ils sont créés à la main.  
 Pour cette hypothétique automatisation, il faudrait:
@@ -32,6 +29,9 @@ lineprefix = "\n \t \t \t"
 def exec(data):
     """
     Exécute les traitements spécifiques et complète le journal.
+
+    - Extrait la liste des descriptions
+    - Extrait la liste des indexations
 
     #### Paramètres
     `data`: données d'exécution locale, valeur de `execloc` dans le dictionnaire `manifeste` défini par le module d'initialisation [`init_mathPbs`](init_mathPbs.html).
@@ -59,6 +59,8 @@ def exec(data):
     descriptions = scantex.get_liste_descriptions(description_pattern)
     log += lineprefix + str(len(descriptions)) + " descriptions \n"
     
-    specific_results = {'indexations': indexations, 'descriptions': descriptions}
+    specific_results = {
+        'indexations': indexations,
+        'descriptions': descriptions}
     
     return {'log': log, 'specific_results': specific_results}

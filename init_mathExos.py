@@ -2,7 +2,7 @@
 """
 Ce module code et présente le *manifeste* du dépôt `math-exos`.
 
-Modifié le 04/03/23 @author: remy
+Modifié le 09/03/23 @author: remy
 
 Le manifeste d'un dépôt décrit
 - les conventions de nommage des fichiers permettant leur traitement local avant publication et contextualisation,
@@ -75,29 +75,42 @@ Les noeuds attachés au dépôt d'exercices sont de plusieurs types. Pour chaque
 
 - Noeud (`Document`) associé à un exercice particulier caractérisé par son titre
     
-        MATCH (e:Document {typeDoc:"exercice", titre:"dt23"}) RETURN e
+        MATCH (e:Document {typeDoc:"exercice", discipline:"mathématique", titre:"dt23"}) RETURN e
 
 - Noeud (`Document`) associé à une feuille d'exercices caractérisée par son titre
     
         MATCH (f:Document {typeDoc:"liste exercices", titre:"Déterminants"}) RETURN f
-    Le titre est associé au code du thème par le fichier `_codes.csv`.
 
 - Noeud (`Concept`) associé à un thème d'exercices caractérisé par son littéral
     
-        MATCH (c:Concept {litteral:"Déterminants"}) RETURN c
-    Le littéral est associé au code du thème par le fichier `_codes.csv`.
-    
+        MATCH (c:Concept {typeConcept:"thème feuille exercices", :"Déterminants"}) RETURN c
+
+Le titre du document "feuille" est égal au littéral du concept "thème" associé au même thème d'exercices.
 #### Arêtes
 
 - Arête (`CONTIENT`) entre une feuille et un exercice
 - Arête (`EVALUE`) entre un exercice et le concept de son thème
 - Arête (`EVALUE`) entre une feuille et le concept de son thème
+- Arête (`INDEXE`) entre un exercice et un concept dont le littéral est indéxé
+ "en dur" dans le fichier source Latex de l'exercice.
 
+Le titre du document "feuille" et le littéral du concept évalué attaché à la même ligne du fichier `_code.csv` doivent être égaux.
+
+On peut insérer directement dans la base des relations qui ne viennent pas des fichiers du dépot. Par exemple des relations `EVALUE` entre un concept (autre qu'un thème d'exercice) et un exercice spécifique.
 
 Voir les sous modules [`graphdb`](graphdb.html), [`bdg_mathExos`](bdg_mathExos.html) pour la mise en oeuvre de la contextualisation.
 
 Ce sous-module ne définit en clair que les paramètres publics du serveur de contextualisation.
 Les credentials secrets sont définis dans les variables d'environnement `NEO4J_URL` et `NEO4J_PASSWORD`.
+
+### Scénarios de travail admissibles
+- supprimer un exercice
+- créer un exercice
+- ajouter un corrigé
+- modifier un énoncé ou un corrigé
+- ajouter un index en insérant à la main
+    - les commandes `index{}` dans le fichier `E`
+    - la commande `\makeindex` dans le préambile du fichier `Aexo`
 
 """
 import os
@@ -154,6 +167,7 @@ execloc = {
         'patterns': ['pdfdir/A_*.pdf', 'htmldir/*']
         },
     'context_data': {
+        'idx_path_pattern': 'Aexo_*.idx'
         }
     }
 
@@ -162,7 +176,7 @@ espace = {
         'region_name': 'fra1',
         'endpoint_url': 'https://fra1.digitaloceanspaces.com',
         'bucket': 'maquisdoc-math',
-        'prefix': 'maths-exos/',
+        'prefix': 'math-exos/',
                    },
         'uri_esp': 'https://maquisdoc-math.fra1.digitaloceanspaces.com/'
     }

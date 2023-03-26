@@ -160,6 +160,37 @@ class Maquis:
         req = req.format(**param)
         return req
 
+    def format_cypher_CREATE(self, param):
+        """
+        Renvoie une requête cypher de type `CREATE`.
+
+        Dans la chaîne modèle
+
+            "CREATE (n: {label} {propsF})"
+
+        remplace les variables entre accolades par les valeurs dans `param`.
+        Utilise la méthode `.format()` d'une chaine.
+
+        #### Parametres
+
+        param : TYPE dictionnaire
+            DESCRIPTION exemple:
+
+            {'label' : "Document",
+             'propsF' :"{typeDoc:'exercice',
+                         titre:'co01'
+                         discipline: 'mathématique}"}.
+
+        #### Renvoie
+
+        TYPE chaine de caractères
+        DESCRIPTION requête cypher.
+
+        """
+        req = "CREATE (n: {label} {propsF})"
+        req = req.format(**param)
+        return req
+
     def do_cypher_tx(self, tx, cypher):
         """
         Exécute une requête cypher et renvoie les valeurs retournées.

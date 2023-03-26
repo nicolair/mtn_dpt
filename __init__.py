@@ -1,15 +1,17 @@
 """
 Package `Maintenance`. Maintient les dépôts maquisdoc.
 
-Modifié le 14/02/23 @author: remy
+Modifié le 09/03/23 @author: remy
 
 Attention dans cette documentation, le terme 'dépôt' désigne une composante
 du projet maquisdoc. On utilisera 'dépot (GitHub)' pour désigner un dépôt
 hébergé par GitHub. Par exemple, ce package est un dépot (GitHub)
 [mtn-dpt](https://github.com/nicolair/mtn_dpt).
 
-La maintenance assure la cohérence entre l'état local d'un dépôt dans lequel un
+La maintenance assure automatiquement la cohérence entre l'état local d'un dépôt dans lequel un
  auteur vient de travailler et les autres composantes du projet.
+
+Des scénarios de travail couvrant les actions les plus courantes sont définis à l'avance et la cohérence n'est assurée que pour ces scénarios. Ils sont précisés dans la documentation du fichier d'initialisation codant le manifeste du dépôt.
 
 Le rôle de la maintenance est de :
 
