@@ -105,7 +105,7 @@ Les credentials secrets sont définis dans les variables d'environnement `NEO4J_
 
 ### Scénarios de travail admissibles
 - supprimer un exercice
-- créer un exercice
+- créer un exercice dans une feuille existante
 - ajouter un corrigé
 - modifier un énoncé ou un corrigé
 - ajouter un index en insérant à la main

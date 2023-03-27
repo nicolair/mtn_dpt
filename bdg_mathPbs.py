@@ -167,10 +167,47 @@ def exec(self):
                 print(val)
 
     # indexations
-    print("\n Indexations locales")
-    print(loc_indexations)
+    #print("\n Indexations locales")
+    indexe(self,loc_indexations)
 
 
     log = ""
     return log
+
+def indexe(self, loc_indexations):
+    '''
+        Assure que des relations `INDEXE` sont associées aux indexations locales.
+    '''
+    print("\n coucou de indexe()")
+    data = self.connect_data
+    URI = data['credentials']['URI']
+    user = data['credentials']['user']
+    password = data['credentials']['password']
+    AUTH = (user, password)
+
+    # indexations dans le graphe
+    req = ''' MATCH (p:Document {typeDoc:"problème"}) -[:INDEXE]-> (c:Concept)
+    RETURN "A" + p.titre, c.litteral
+    '''
+    #print(req)
+    with neo4j.GraphDatabase.driver(URI, auth=AUTH).session(database="neo4j") as session:
+        rem_indexations = session.execute_write(self.do_cypher_tx, req)
+
+    print(rem_indexations)
+    print(loc_indexations)
+
+        # création des indexations manquantes dans le graphe
+    req = ''' MATCH (p:Document {{typeDoc:"problème", titre: "{0}"}})
+    MERGE (c:Concept {{litteral:"{1}"}})
+    CREATE (p)-[:INDEXE]->(c)
+    '''
+    rem_index_orph = []
+    for index in loc_indexations :
+        if index not in rem_indexations:
+            nom = index[0][1:]
+            concept = index[1]
+            req1 = req.format(nom, concept)
+            print(nom, concept, req1)
+            with neo4j.GraphDatabase.driver(URI, auth=AUTH).session(database="neo4j") as session:
+                val = session.execute_write(self.do_cypher_tx, req1)
 

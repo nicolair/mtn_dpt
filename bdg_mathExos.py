@@ -3,7 +3,7 @@
 """
 La contextualisation du dépôt d'exercices  s'assure que la base en graphe reflète les exercices et leurs méta-données locales. Ces méta-données sont définies par l'auteur c'est à dire écrites dans le dépôt local. La modification d'une méta-donnée de ce type se fait dans le dépôt et non dans la base en graphe.
 
-Modifié le 16/03/23 @author: remy
+Modifié le 26/03/23 @author: remy
 
 La fonction `exec()` est appelée lors de l'instanciation de la classe `Maquis`. Elle met à jour la base en fonction de l'état du dépôt en exécutant des requêtes cypher.
 
@@ -28,7 +28,14 @@ locale.setlocale(locale.LC_ALL, '')
 def exec(self):
     """
     Exécution des requêtes spécifques de maintenance de la base.
-    - récupération des noeuds exercices dans la base
+    - les données locales (feuilles et exercices) ont été formées par l'exécution locale spécifique et sont passées par le paramètre `specific_results`.
+    - récupération dans la base des patterns
+
+        (feuille) -[:CONTIENT]-> (exercice) -[:EVALUE]-> (concept)
+    - affichage des feuilles par ordre alphabétique des thèmes
+    - comparaison des exercices locaux et dans le graphe (orphelins)
+    - création des patterns pour les exercices locaux absents du graphe
+    - création des patterns pour les indexations locales absentes du graphe.
 
     #### Renvoie
 
@@ -133,9 +140,8 @@ def exec(self):
     nouveaux_exos(self,loc_exos_orph, themes)
 
     # indexations
-    print("\n Indexations locales")
-    print(loc_indexations)
-
+    #print("\n Indexations locales")
+    indexe(self, loc_indexations)
     
     log = ""
     return log
@@ -143,6 +149,15 @@ def exec(self):
 def nouveaux_exos(self,loc_exos_orph,themes):
     """
     insertion dans le maquis des éléments associés à un exercice local sans noeud associé.
+
+    Pour chaque exercice local absent du graphe
+    - crée le noeud exercice
+    - crée la relation feuille `CONTIENT` exercice
+    - crée la relation exercice `EVALUE` concept
+
+    Noter que le titre de la feuille contenant l'exercice est le littéral du concept évalué.
+
+    On peut créer un nouvel exercice dans une feuille existante mais pas créer une nouvelle feuille.
     """
     print("\n coucou de nouvel_exo()")
     data = self.connect_data
@@ -187,5 +202,39 @@ def nouveaux_exos(self,loc_exos_orph,themes):
         with neo4j.GraphDatabase.driver(URI, auth=AUTH).session(database="neo4j") as session:
             val = session.execute_write(self.do_cypher_tx, req)
 
+def indexe(self, loc_indexations):
+    '''
+        Assure que des relations `INDEXE` sont associées aux indexations locales.
+    '''
+    print("\n coucou de indexe()")
+    data = self.connect_data
+    URI = data['credentials']['URI']
+    user = data['credentials']['user']
+    password = data['credentials']['password']
+    AUTH = (user, password)
 
+    # indexations dans le graphe
+    req = ''' MATCH (e:Document {typeDoc:"exercice", discipline: "mathématique"}) -[:INDEXE]-> (c:Concept)
+    RETURN "Aexo_" + e.titre, c.litteral
+    '''
+    #print(req)
+    with neo4j.GraphDatabase.driver(URI, auth=AUTH).session(database="neo4j") as session:
+            rem_indexations = session.execute_write(self.do_cypher_tx, req)
+
+    print(rem_indexations)
+    print(loc_indexations)
+
+    # création des indexations manquantes dans le graphe
+    req = ''' MATCH (e:Document {{typeDoc:"exercice", discipline: "mathématique", titre: "{0}"}})
+    MERGE (c:Concept {{litteral:"{1}"}})
+    CREATE (e)-[:INDEXE]->(c)
+    '''
+    rem_index_orph = []
+    for index in loc_indexations :
+        if index not in rem_indexations:
+            nom = index[0][5:]
+            concept = index[1]
+            req1 = req.format(nom, concept)
+            with neo4j.GraphDatabase.driver(URI, auth=AUTH).session(database="neo4j") as session:
+                val = session.execute_write(self.do_cypher_tx, req1)
 

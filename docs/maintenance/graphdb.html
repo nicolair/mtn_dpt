@@ -46,6 +46,9 @@
                                 <a class="function" href="#Maquis.format_cypher_SET">format_cypher_SET</a>
                         </li>
                         <li>
+                                <a class="function" href="#Maquis.format_cypher_CREATE">format_cypher_CREATE</a>
+                        </li>
+                        <li>
                                 <a class="function" href="#Maquis.do_cypher_tx">do_cypher_tx</a>
                         </li>
                 </ul>
@@ -250,26 +253,57 @@
 </span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>        <span class="n">req</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">param</span><span class="p">)</span>
 </span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>        <span class="k">return</span> <span class="n">req</span>
 </span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>
-</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>    <span class="k">def</span> <span class="nf">do_cypher_tx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tx</span><span class="p">,</span> <span class="n">cypher</span><span class="p">):</span>
+</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>    <span class="k">def</span> <span class="nf">format_cypher_CREATE</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
 </span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a><span class="sd">        Exécute une requête cypher et renvoie les valeurs retournées.</span>
+</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a><span class="sd">        Renvoie une requête cypher de type `CREATE`.</span>
 </span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>
-</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="sd">        #### Parametres</span>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="sd">        Dans la chaîne modèle</span>
 </span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>
-</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a><span class="sd">        tx: TYPE transaction neo4j DESCRIPTION lié à la session neo4j</span>
-</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a><span class="sd">        *pas clair!*</span>
-</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>
-</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="sd">        cypher: TYPE chaine de caractères DESCRIPTION requête cypher</span>
+</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a><span class="sd">            &quot;CREATE (n: {label} {propsF})&quot;</span>
+</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>
+</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a><span class="sd">        remplace les variables entre accolades par les valeurs dans `param`.</span>
+</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="sd">        Utilise la méthode `.format()` d&#39;une chaine.</span>
 </span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a>
-</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a><span class="sd">        #### Renvoie</span>
+</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a><span class="sd">        #### Parametres</span>
 </span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>
-</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a><span class="sd">        TYPE liste</span>
-</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a>
-</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a><span class="sd">        DESCRIPTION valeurs retournées par la requête</span>
-</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a>        <span class="n">result</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cypher</span><span class="p">)</span>
-</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">record</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
-</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a>        <span class="k">return</span> <span class="n">values</span>
+</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a><span class="sd">        param : TYPE dictionnaire</span>
+</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a><span class="sd">            DESCRIPTION exemple:</span>
+</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>
+</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a><span class="sd">            {&#39;label&#39; : &quot;Document&quot;,</span>
+</span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a><span class="sd">             &#39;propsF&#39; :&quot;{typeDoc:&#39;exercice&#39;,</span>
+</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a><span class="sd">                         titre:&#39;co01&#39;</span>
+</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a><span class="sd">                         discipline: &#39;mathématique}&quot;}.</span>
+</span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a>
+</span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a><span class="sd">        #### Renvoie</span>
+</span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a>
+</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a><span class="sd">        TYPE chaine de caractères</span>
+</span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a><span class="sd">        DESCRIPTION requête cypher.</span>
+</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a>
+</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a>        <span class="n">req</span> <span class="o">=</span> <span class="s2">&quot;CREATE (n: </span><span class="si">{label}</span><span class="s2"> </span><span class="si">{propsF}</span><span class="s2">)&quot;</span>
+</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>        <span class="n">req</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">param</span><span class="p">)</span>
+</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a>        <span class="k">return</span> <span class="n">req</span>
+</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>
+</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a>    <span class="k">def</span> <span class="nf">do_cypher_tx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tx</span><span class="p">,</span> <span class="n">cypher</span><span class="p">):</span>
+</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a><span class="sd">        Exécute une requête cypher et renvoie les valeurs retournées.</span>
+</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>
+</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a><span class="sd">        #### Parametres</span>
+</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>
+</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a><span class="sd">        tx: TYPE transaction neo4j DESCRIPTION lié à la session neo4j</span>
+</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a><span class="sd">        *pas clair!*</span>
+</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>
+</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a><span class="sd">        cypher: TYPE chaine de caractères DESCRIPTION requête cypher</span>
+</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>
+</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a><span class="sd">        #### Renvoie</span>
+</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a>
+</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a><span class="sd">        TYPE liste</span>
+</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>
+</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a><span class="sd">        DESCRIPTION valeurs retournées par la requête</span>
+</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>        <span class="n">result</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cypher</span><span class="p">)</span>
+</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">record</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
+</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a>        <span class="k">return</span> <span class="n">values</span>
 </span></pre></div>
 
 
@@ -426,26 +460,57 @@
 </span><span id="Maquis-161"><a href="#Maquis-161"><span class="linenos">161</span></a>        <span class="n">req</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">param</span><span class="p">)</span>
 </span><span id="Maquis-162"><a href="#Maquis-162"><span class="linenos">162</span></a>        <span class="k">return</span> <span class="n">req</span>
 </span><span id="Maquis-163"><a href="#Maquis-163"><span class="linenos">163</span></a>
-</span><span id="Maquis-164"><a href="#Maquis-164"><span class="linenos">164</span></a>    <span class="k">def</span> <span class="nf">do_cypher_tx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tx</span><span class="p">,</span> <span class="n">cypher</span><span class="p">):</span>
+</span><span id="Maquis-164"><a href="#Maquis-164"><span class="linenos">164</span></a>    <span class="k">def</span> <span class="nf">format_cypher_CREATE</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
 </span><span id="Maquis-165"><a href="#Maquis-165"><span class="linenos">165</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Maquis-166"><a href="#Maquis-166"><span class="linenos">166</span></a><span class="sd">        Exécute une requête cypher et renvoie les valeurs retournées.</span>
+</span><span id="Maquis-166"><a href="#Maquis-166"><span class="linenos">166</span></a><span class="sd">        Renvoie une requête cypher de type `CREATE`.</span>
 </span><span id="Maquis-167"><a href="#Maquis-167"><span class="linenos">167</span></a>
-</span><span id="Maquis-168"><a href="#Maquis-168"><span class="linenos">168</span></a><span class="sd">        #### Parametres</span>
+</span><span id="Maquis-168"><a href="#Maquis-168"><span class="linenos">168</span></a><span class="sd">        Dans la chaîne modèle</span>
 </span><span id="Maquis-169"><a href="#Maquis-169"><span class="linenos">169</span></a>
-</span><span id="Maquis-170"><a href="#Maquis-170"><span class="linenos">170</span></a><span class="sd">        tx: TYPE transaction neo4j DESCRIPTION lié à la session neo4j</span>
-</span><span id="Maquis-171"><a href="#Maquis-171"><span class="linenos">171</span></a><span class="sd">        *pas clair!*</span>
-</span><span id="Maquis-172"><a href="#Maquis-172"><span class="linenos">172</span></a>
-</span><span id="Maquis-173"><a href="#Maquis-173"><span class="linenos">173</span></a><span class="sd">        cypher: TYPE chaine de caractères DESCRIPTION requête cypher</span>
+</span><span id="Maquis-170"><a href="#Maquis-170"><span class="linenos">170</span></a><span class="sd">            &quot;CREATE (n: {label} {propsF})&quot;</span>
+</span><span id="Maquis-171"><a href="#Maquis-171"><span class="linenos">171</span></a>
+</span><span id="Maquis-172"><a href="#Maquis-172"><span class="linenos">172</span></a><span class="sd">        remplace les variables entre accolades par les valeurs dans `param`.</span>
+</span><span id="Maquis-173"><a href="#Maquis-173"><span class="linenos">173</span></a><span class="sd">        Utilise la méthode `.format()` d&#39;une chaine.</span>
 </span><span id="Maquis-174"><a href="#Maquis-174"><span class="linenos">174</span></a>
-</span><span id="Maquis-175"><a href="#Maquis-175"><span class="linenos">175</span></a><span class="sd">        #### Renvoie</span>
+</span><span id="Maquis-175"><a href="#Maquis-175"><span class="linenos">175</span></a><span class="sd">        #### Parametres</span>
 </span><span id="Maquis-176"><a href="#Maquis-176"><span class="linenos">176</span></a>
-</span><span id="Maquis-177"><a href="#Maquis-177"><span class="linenos">177</span></a><span class="sd">        TYPE liste</span>
-</span><span id="Maquis-178"><a href="#Maquis-178"><span class="linenos">178</span></a>
-</span><span id="Maquis-179"><a href="#Maquis-179"><span class="linenos">179</span></a><span class="sd">        DESCRIPTION valeurs retournées par la requête</span>
-</span><span id="Maquis-180"><a href="#Maquis-180"><span class="linenos">180</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Maquis-181"><a href="#Maquis-181"><span class="linenos">181</span></a>        <span class="n">result</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cypher</span><span class="p">)</span>
-</span><span id="Maquis-182"><a href="#Maquis-182"><span class="linenos">182</span></a>        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">record</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
-</span><span id="Maquis-183"><a href="#Maquis-183"><span class="linenos">183</span></a>        <span class="k">return</span> <span class="n">values</span>
+</span><span id="Maquis-177"><a href="#Maquis-177"><span class="linenos">177</span></a><span class="sd">        param : TYPE dictionnaire</span>
+</span><span id="Maquis-178"><a href="#Maquis-178"><span class="linenos">178</span></a><span class="sd">            DESCRIPTION exemple:</span>
+</span><span id="Maquis-179"><a href="#Maquis-179"><span class="linenos">179</span></a>
+</span><span id="Maquis-180"><a href="#Maquis-180"><span class="linenos">180</span></a><span class="sd">            {&#39;label&#39; : &quot;Document&quot;,</span>
+</span><span id="Maquis-181"><a href="#Maquis-181"><span class="linenos">181</span></a><span class="sd">             &#39;propsF&#39; :&quot;{typeDoc:&#39;exercice&#39;,</span>
+</span><span id="Maquis-182"><a href="#Maquis-182"><span class="linenos">182</span></a><span class="sd">                         titre:&#39;co01&#39;</span>
+</span><span id="Maquis-183"><a href="#Maquis-183"><span class="linenos">183</span></a><span class="sd">                         discipline: &#39;mathématique}&quot;}.</span>
+</span><span id="Maquis-184"><a href="#Maquis-184"><span class="linenos">184</span></a>
+</span><span id="Maquis-185"><a href="#Maquis-185"><span class="linenos">185</span></a><span class="sd">        #### Renvoie</span>
+</span><span id="Maquis-186"><a href="#Maquis-186"><span class="linenos">186</span></a>
+</span><span id="Maquis-187"><a href="#Maquis-187"><span class="linenos">187</span></a><span class="sd">        TYPE chaine de caractères</span>
+</span><span id="Maquis-188"><a href="#Maquis-188"><span class="linenos">188</span></a><span class="sd">        DESCRIPTION requête cypher.</span>
+</span><span id="Maquis-189"><a href="#Maquis-189"><span class="linenos">189</span></a>
+</span><span id="Maquis-190"><a href="#Maquis-190"><span class="linenos">190</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Maquis-191"><a href="#Maquis-191"><span class="linenos">191</span></a>        <span class="n">req</span> <span class="o">=</span> <span class="s2">&quot;CREATE (n: </span><span class="si">{label}</span><span class="s2"> </span><span class="si">{propsF}</span><span class="s2">)&quot;</span>
+</span><span id="Maquis-192"><a href="#Maquis-192"><span class="linenos">192</span></a>        <span class="n">req</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">param</span><span class="p">)</span>
+</span><span id="Maquis-193"><a href="#Maquis-193"><span class="linenos">193</span></a>        <span class="k">return</span> <span class="n">req</span>
+</span><span id="Maquis-194"><a href="#Maquis-194"><span class="linenos">194</span></a>
+</span><span id="Maquis-195"><a href="#Maquis-195"><span class="linenos">195</span></a>    <span class="k">def</span> <span class="nf">do_cypher_tx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tx</span><span class="p">,</span> <span class="n">cypher</span><span class="p">):</span>
+</span><span id="Maquis-196"><a href="#Maquis-196"><span class="linenos">196</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Maquis-197"><a href="#Maquis-197"><span class="linenos">197</span></a><span class="sd">        Exécute une requête cypher et renvoie les valeurs retournées.</span>
+</span><span id="Maquis-198"><a href="#Maquis-198"><span class="linenos">198</span></a>
+</span><span id="Maquis-199"><a href="#Maquis-199"><span class="linenos">199</span></a><span class="sd">        #### Parametres</span>
+</span><span id="Maquis-200"><a href="#Maquis-200"><span class="linenos">200</span></a>
+</span><span id="Maquis-201"><a href="#Maquis-201"><span class="linenos">201</span></a><span class="sd">        tx: TYPE transaction neo4j DESCRIPTION lié à la session neo4j</span>
+</span><span id="Maquis-202"><a href="#Maquis-202"><span class="linenos">202</span></a><span class="sd">        *pas clair!*</span>
+</span><span id="Maquis-203"><a href="#Maquis-203"><span class="linenos">203</span></a>
+</span><span id="Maquis-204"><a href="#Maquis-204"><span class="linenos">204</span></a><span class="sd">        cypher: TYPE chaine de caractères DESCRIPTION requête cypher</span>
+</span><span id="Maquis-205"><a href="#Maquis-205"><span class="linenos">205</span></a>
+</span><span id="Maquis-206"><a href="#Maquis-206"><span class="linenos">206</span></a><span class="sd">        #### Renvoie</span>
+</span><span id="Maquis-207"><a href="#Maquis-207"><span class="linenos">207</span></a>
+</span><span id="Maquis-208"><a href="#Maquis-208"><span class="linenos">208</span></a><span class="sd">        TYPE liste</span>
+</span><span id="Maquis-209"><a href="#Maquis-209"><span class="linenos">209</span></a>
+</span><span id="Maquis-210"><a href="#Maquis-210"><span class="linenos">210</span></a><span class="sd">        DESCRIPTION valeurs retournées par la requête</span>
+</span><span id="Maquis-211"><a href="#Maquis-211"><span class="linenos">211</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Maquis-212"><a href="#Maquis-212"><span class="linenos">212</span></a>        <span class="n">result</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cypher</span><span class="p">)</span>
+</span><span id="Maquis-213"><a href="#Maquis-213"><span class="linenos">213</span></a>        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">record</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
+</span><span id="Maquis-214"><a href="#Maquis-214"><span class="linenos">214</span></a>        <span class="k">return</span> <span class="n">values</span>
 </span></pre></div>
 
 
@@ -752,6 +817,79 @@ DESCRIPTION requête cypher.</p>
 
 
                             </div>
+                            <div id="Maquis.format_cypher_CREATE" class="classattr">
+                                        <input id="Maquis.format_cypher_CREATE-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">format_cypher_CREATE</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">param</span></span><span class="return-annotation">):</span></span>
+
+                <label class="view-source-button" for="Maquis.format_cypher_CREATE-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Maquis.format_cypher_CREATE"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Maquis.format_cypher_CREATE-164"><a href="#Maquis.format_cypher_CREATE-164"><span class="linenos">164</span></a>    <span class="k">def</span> <span class="nf">format_cypher_CREATE</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+</span><span id="Maquis.format_cypher_CREATE-165"><a href="#Maquis.format_cypher_CREATE-165"><span class="linenos">165</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Maquis.format_cypher_CREATE-166"><a href="#Maquis.format_cypher_CREATE-166"><span class="linenos">166</span></a><span class="sd">        Renvoie une requête cypher de type `CREATE`.</span>
+</span><span id="Maquis.format_cypher_CREATE-167"><a href="#Maquis.format_cypher_CREATE-167"><span class="linenos">167</span></a>
+</span><span id="Maquis.format_cypher_CREATE-168"><a href="#Maquis.format_cypher_CREATE-168"><span class="linenos">168</span></a><span class="sd">        Dans la chaîne modèle</span>
+</span><span id="Maquis.format_cypher_CREATE-169"><a href="#Maquis.format_cypher_CREATE-169"><span class="linenos">169</span></a>
+</span><span id="Maquis.format_cypher_CREATE-170"><a href="#Maquis.format_cypher_CREATE-170"><span class="linenos">170</span></a><span class="sd">            &quot;CREATE (n: {label} {propsF})&quot;</span>
+</span><span id="Maquis.format_cypher_CREATE-171"><a href="#Maquis.format_cypher_CREATE-171"><span class="linenos">171</span></a>
+</span><span id="Maquis.format_cypher_CREATE-172"><a href="#Maquis.format_cypher_CREATE-172"><span class="linenos">172</span></a><span class="sd">        remplace les variables entre accolades par les valeurs dans `param`.</span>
+</span><span id="Maquis.format_cypher_CREATE-173"><a href="#Maquis.format_cypher_CREATE-173"><span class="linenos">173</span></a><span class="sd">        Utilise la méthode `.format()` d&#39;une chaine.</span>
+</span><span id="Maquis.format_cypher_CREATE-174"><a href="#Maquis.format_cypher_CREATE-174"><span class="linenos">174</span></a>
+</span><span id="Maquis.format_cypher_CREATE-175"><a href="#Maquis.format_cypher_CREATE-175"><span class="linenos">175</span></a><span class="sd">        #### Parametres</span>
+</span><span id="Maquis.format_cypher_CREATE-176"><a href="#Maquis.format_cypher_CREATE-176"><span class="linenos">176</span></a>
+</span><span id="Maquis.format_cypher_CREATE-177"><a href="#Maquis.format_cypher_CREATE-177"><span class="linenos">177</span></a><span class="sd">        param : TYPE dictionnaire</span>
+</span><span id="Maquis.format_cypher_CREATE-178"><a href="#Maquis.format_cypher_CREATE-178"><span class="linenos">178</span></a><span class="sd">            DESCRIPTION exemple:</span>
+</span><span id="Maquis.format_cypher_CREATE-179"><a href="#Maquis.format_cypher_CREATE-179"><span class="linenos">179</span></a>
+</span><span id="Maquis.format_cypher_CREATE-180"><a href="#Maquis.format_cypher_CREATE-180"><span class="linenos">180</span></a><span class="sd">            {&#39;label&#39; : &quot;Document&quot;,</span>
+</span><span id="Maquis.format_cypher_CREATE-181"><a href="#Maquis.format_cypher_CREATE-181"><span class="linenos">181</span></a><span class="sd">             &#39;propsF&#39; :&quot;{typeDoc:&#39;exercice&#39;,</span>
+</span><span id="Maquis.format_cypher_CREATE-182"><a href="#Maquis.format_cypher_CREATE-182"><span class="linenos">182</span></a><span class="sd">                         titre:&#39;co01&#39;</span>
+</span><span id="Maquis.format_cypher_CREATE-183"><a href="#Maquis.format_cypher_CREATE-183"><span class="linenos">183</span></a><span class="sd">                         discipline: &#39;mathématique}&quot;}.</span>
+</span><span id="Maquis.format_cypher_CREATE-184"><a href="#Maquis.format_cypher_CREATE-184"><span class="linenos">184</span></a>
+</span><span id="Maquis.format_cypher_CREATE-185"><a href="#Maquis.format_cypher_CREATE-185"><span class="linenos">185</span></a><span class="sd">        #### Renvoie</span>
+</span><span id="Maquis.format_cypher_CREATE-186"><a href="#Maquis.format_cypher_CREATE-186"><span class="linenos">186</span></a>
+</span><span id="Maquis.format_cypher_CREATE-187"><a href="#Maquis.format_cypher_CREATE-187"><span class="linenos">187</span></a><span class="sd">        TYPE chaine de caractères</span>
+</span><span id="Maquis.format_cypher_CREATE-188"><a href="#Maquis.format_cypher_CREATE-188"><span class="linenos">188</span></a><span class="sd">        DESCRIPTION requête cypher.</span>
+</span><span id="Maquis.format_cypher_CREATE-189"><a href="#Maquis.format_cypher_CREATE-189"><span class="linenos">189</span></a>
+</span><span id="Maquis.format_cypher_CREATE-190"><a href="#Maquis.format_cypher_CREATE-190"><span class="linenos">190</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Maquis.format_cypher_CREATE-191"><a href="#Maquis.format_cypher_CREATE-191"><span class="linenos">191</span></a>        <span class="n">req</span> <span class="o">=</span> <span class="s2">&quot;CREATE (n: </span><span class="si">{label}</span><span class="s2"> </span><span class="si">{propsF}</span><span class="s2">)&quot;</span>
+</span><span id="Maquis.format_cypher_CREATE-192"><a href="#Maquis.format_cypher_CREATE-192"><span class="linenos">192</span></a>        <span class="n">req</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">param</span><span class="p">)</span>
+</span><span id="Maquis.format_cypher_CREATE-193"><a href="#Maquis.format_cypher_CREATE-193"><span class="linenos">193</span></a>        <span class="k">return</span> <span class="n">req</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Renvoie une requête cypher de type <code>CREATE</code>.</p>
+
+<p>Dans la chaîne modèle</p>
+
+<pre><code>"CREATE (n: {label} {propsF})"
+</code></pre>
+
+<p>remplace les variables entre accolades par les valeurs dans <code>param</code>.
+Utilise la méthode <code>.format()</code> d'une chaine.</p>
+
+<h4 id="parametres">Parametres</h4>
+
+<p>param : TYPE dictionnaire
+    DESCRIPTION exemple:</p>
+
+<pre><code>{'label' : "Document",
+ 'propsF' :"{typeDoc:'exercice',
+             titre:'co01'
+             discipline: 'mathématique}"}.
+</code></pre>
+
+<h4 id="renvoie">Renvoie</h4>
+
+<p>TYPE chaine de caractères
+DESCRIPTION requête cypher.</p>
+</div>
+
+
+                            </div>
                             <div id="Maquis.do_cypher_tx" class="classattr">
                                         <input id="Maquis.do_cypher_tx-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
@@ -763,26 +901,26 @@ DESCRIPTION requête cypher.</p>
 
     </div>
     <a class="headerlink" href="#Maquis.do_cypher_tx"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Maquis.do_cypher_tx-164"><a href="#Maquis.do_cypher_tx-164"><span class="linenos">164</span></a>    <span class="k">def</span> <span class="nf">do_cypher_tx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tx</span><span class="p">,</span> <span class="n">cypher</span><span class="p">):</span>
-</span><span id="Maquis.do_cypher_tx-165"><a href="#Maquis.do_cypher_tx-165"><span class="linenos">165</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Maquis.do_cypher_tx-166"><a href="#Maquis.do_cypher_tx-166"><span class="linenos">166</span></a><span class="sd">        Exécute une requête cypher et renvoie les valeurs retournées.</span>
-</span><span id="Maquis.do_cypher_tx-167"><a href="#Maquis.do_cypher_tx-167"><span class="linenos">167</span></a>
-</span><span id="Maquis.do_cypher_tx-168"><a href="#Maquis.do_cypher_tx-168"><span class="linenos">168</span></a><span class="sd">        #### Parametres</span>
-</span><span id="Maquis.do_cypher_tx-169"><a href="#Maquis.do_cypher_tx-169"><span class="linenos">169</span></a>
-</span><span id="Maquis.do_cypher_tx-170"><a href="#Maquis.do_cypher_tx-170"><span class="linenos">170</span></a><span class="sd">        tx: TYPE transaction neo4j DESCRIPTION lié à la session neo4j</span>
-</span><span id="Maquis.do_cypher_tx-171"><a href="#Maquis.do_cypher_tx-171"><span class="linenos">171</span></a><span class="sd">        *pas clair!*</span>
-</span><span id="Maquis.do_cypher_tx-172"><a href="#Maquis.do_cypher_tx-172"><span class="linenos">172</span></a>
-</span><span id="Maquis.do_cypher_tx-173"><a href="#Maquis.do_cypher_tx-173"><span class="linenos">173</span></a><span class="sd">        cypher: TYPE chaine de caractères DESCRIPTION requête cypher</span>
-</span><span id="Maquis.do_cypher_tx-174"><a href="#Maquis.do_cypher_tx-174"><span class="linenos">174</span></a>
-</span><span id="Maquis.do_cypher_tx-175"><a href="#Maquis.do_cypher_tx-175"><span class="linenos">175</span></a><span class="sd">        #### Renvoie</span>
-</span><span id="Maquis.do_cypher_tx-176"><a href="#Maquis.do_cypher_tx-176"><span class="linenos">176</span></a>
-</span><span id="Maquis.do_cypher_tx-177"><a href="#Maquis.do_cypher_tx-177"><span class="linenos">177</span></a><span class="sd">        TYPE liste</span>
-</span><span id="Maquis.do_cypher_tx-178"><a href="#Maquis.do_cypher_tx-178"><span class="linenos">178</span></a>
-</span><span id="Maquis.do_cypher_tx-179"><a href="#Maquis.do_cypher_tx-179"><span class="linenos">179</span></a><span class="sd">        DESCRIPTION valeurs retournées par la requête</span>
-</span><span id="Maquis.do_cypher_tx-180"><a href="#Maquis.do_cypher_tx-180"><span class="linenos">180</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Maquis.do_cypher_tx-181"><a href="#Maquis.do_cypher_tx-181"><span class="linenos">181</span></a>        <span class="n">result</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cypher</span><span class="p">)</span>
-</span><span id="Maquis.do_cypher_tx-182"><a href="#Maquis.do_cypher_tx-182"><span class="linenos">182</span></a>        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">record</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
-</span><span id="Maquis.do_cypher_tx-183"><a href="#Maquis.do_cypher_tx-183"><span class="linenos">183</span></a>        <span class="k">return</span> <span class="n">values</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Maquis.do_cypher_tx-195"><a href="#Maquis.do_cypher_tx-195"><span class="linenos">195</span></a>    <span class="k">def</span> <span class="nf">do_cypher_tx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tx</span><span class="p">,</span> <span class="n">cypher</span><span class="p">):</span>
+</span><span id="Maquis.do_cypher_tx-196"><a href="#Maquis.do_cypher_tx-196"><span class="linenos">196</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Maquis.do_cypher_tx-197"><a href="#Maquis.do_cypher_tx-197"><span class="linenos">197</span></a><span class="sd">        Exécute une requête cypher et renvoie les valeurs retournées.</span>
+</span><span id="Maquis.do_cypher_tx-198"><a href="#Maquis.do_cypher_tx-198"><span class="linenos">198</span></a>
+</span><span id="Maquis.do_cypher_tx-199"><a href="#Maquis.do_cypher_tx-199"><span class="linenos">199</span></a><span class="sd">        #### Parametres</span>
+</span><span id="Maquis.do_cypher_tx-200"><a href="#Maquis.do_cypher_tx-200"><span class="linenos">200</span></a>
+</span><span id="Maquis.do_cypher_tx-201"><a href="#Maquis.do_cypher_tx-201"><span class="linenos">201</span></a><span class="sd">        tx: TYPE transaction neo4j DESCRIPTION lié à la session neo4j</span>
+</span><span id="Maquis.do_cypher_tx-202"><a href="#Maquis.do_cypher_tx-202"><span class="linenos">202</span></a><span class="sd">        *pas clair!*</span>
+</span><span id="Maquis.do_cypher_tx-203"><a href="#Maquis.do_cypher_tx-203"><span class="linenos">203</span></a>
+</span><span id="Maquis.do_cypher_tx-204"><a href="#Maquis.do_cypher_tx-204"><span class="linenos">204</span></a><span class="sd">        cypher: TYPE chaine de caractères DESCRIPTION requête cypher</span>
+</span><span id="Maquis.do_cypher_tx-205"><a href="#Maquis.do_cypher_tx-205"><span class="linenos">205</span></a>
+</span><span id="Maquis.do_cypher_tx-206"><a href="#Maquis.do_cypher_tx-206"><span class="linenos">206</span></a><span class="sd">        #### Renvoie</span>
+</span><span id="Maquis.do_cypher_tx-207"><a href="#Maquis.do_cypher_tx-207"><span class="linenos">207</span></a>
+</span><span id="Maquis.do_cypher_tx-208"><a href="#Maquis.do_cypher_tx-208"><span class="linenos">208</span></a><span class="sd">        TYPE liste</span>
+</span><span id="Maquis.do_cypher_tx-209"><a href="#Maquis.do_cypher_tx-209"><span class="linenos">209</span></a>
+</span><span id="Maquis.do_cypher_tx-210"><a href="#Maquis.do_cypher_tx-210"><span class="linenos">210</span></a><span class="sd">        DESCRIPTION valeurs retournées par la requête</span>
+</span><span id="Maquis.do_cypher_tx-211"><a href="#Maquis.do_cypher_tx-211"><span class="linenos">211</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Maquis.do_cypher_tx-212"><a href="#Maquis.do_cypher_tx-212"><span class="linenos">212</span></a>        <span class="n">result</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cypher</span><span class="p">)</span>
+</span><span id="Maquis.do_cypher_tx-213"><a href="#Maquis.do_cypher_tx-213"><span class="linenos">213</span></a>        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">record</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
+</span><span id="Maquis.do_cypher_tx-214"><a href="#Maquis.do_cypher_tx-214"><span class="linenos">214</span></a>        <span class="k">return</span> <span class="n">values</span>
 </span></pre></div>
 
 

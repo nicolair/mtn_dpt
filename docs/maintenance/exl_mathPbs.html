@@ -49,17 +49,12 @@
                     <h1 class="modulename">
 <a href="./../maintenance.html">maintenance</a><wbr>.exl_mathPbs    </h1>
 
-                        <div class="docstring"><p>Traitement local spécifique des fichiers du dépôt <code>mathPbs</code> et complétant les compilations définies dans le manifeste.</p>
+                        <div class="docstring"><p>Module de scripts (à exécuter localement) spécifiques au dépôt d'exercices et complétant les commandes définies dans le manifeste.</p>
 
-<p>Modifié le 04/03/23 @author: remy</p>
+<p>Modifié le 15/03/23 @author: remy</p>
 
 <p>Ce module est importé par l'instanciation de l'objet <code>Execlocal</code>. <br />
-Traitements exécutés par la fonction <code><a href="#exec">exec()</a></code> du module:</p>
-
-<ul>
-<li>extraction de la liste des descriptions</li>
-<li>extraction de la liste des indexations </li>
-</ul>
+Les traitements sont exécutés par la fonction <code><a href="#exec">exec()</a></code> du module.</p>
 
 <p>J'envisage d'automatiser la création des fichiers <code>A</code> à partir des énoncés<code>E</code>. Pour le moment, ils sont créés à la main. <br />
 Pour cette hypothétique automatisation, il faudrait:</p>
@@ -77,38 +72,38 @@ Pour cette hypothétique automatisation, il faudrait:</p>
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="c1"># -*- coding: utf-8 -*- </span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="sd">Traitement local spécifique des fichiers du dépôt `mathPbs` et complétant les compilations définies dans le manifeste.</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="sd">Module de scripts (à exécuter localement) spécifiques au dépôt d&#39;exercices et complétant les commandes définies dans le manifeste.</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">Modifié le 04/03/23 @author: remy</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">Modifié le 15/03/23 @author: remy</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="sd">Ce module est importé par l&#39;instanciation de l&#39;objet `Execlocal`.  </span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">Traitements exécutés par la fonction `exec()` du module:</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">Les traitements sont exécutés par la fonction `exec()` du module.</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">- extraction de la liste des descriptions</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">- extraction de la liste des indexations </span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">J&#39;envisage d&#39;automatiser la création des fichiers `A` à partir des énoncés`E`. Pour le moment, ils sont créés à la main.  </span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">Pour cette hypothétique automatisation, il faudrait:</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">J&#39;envisage d&#39;automatiser la création des fichiers `A` à partir des énoncés`E`. Pour le moment, ils sont créés à la main.  </span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">Pour cette hypothétique automatisation, il faudrait:</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">- Former la liste des énoncés Latex dans le dossier</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">- Former les fichiers `A` avec énoncé et corrigé (éventuel)</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="sd">- Former la liste des fichiers à publier</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="kn">import</span> <span class="nn">csv</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="kn">import</span> <span class="nn">glob</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="kn">import</span> <span class="nn">os.path</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="kn">import</span> <span class="nn">re</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="kn">import</span> <span class="nn">scantex</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="n">dp_data</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="n">dp_data</span><span class="p">[</span><span class="s1">&#39;relative_path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;../math-pbs/&#39;</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="n">relpath</span> <span class="o">=</span> <span class="s1">&#39;../math-pbs/&#39;</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="n">lineprefix</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> </span><span class="se">\t</span><span class="s2"> </span><span class="se">\t</span><span class="s2"> </span><span class="se">\t</span><span class="s2">&quot;</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="k">def</span> <span class="nf">exec</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">    Exécute les traitements spécifiques et complète le journal.</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">- Former la liste des énoncés Latex dans le dossier</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">- Former les fichiers `A` avec énoncé et corrigé (éventuel)</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">- Former la liste des fichiers à publier</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="kn">import</span> <span class="nn">csv</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="kn">import</span> <span class="nn">glob</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="kn">import</span> <span class="nn">os.path</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="kn">import</span> <span class="nn">re</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="kn">import</span> <span class="nn">scantex</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="n">dp_data</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="n">dp_data</span><span class="p">[</span><span class="s1">&#39;relative_path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;../math-pbs/&#39;</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="n">relpath</span> <span class="o">=</span> <span class="s1">&#39;../math-pbs/&#39;</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="n">lineprefix</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> </span><span class="se">\t</span><span class="s2"> </span><span class="se">\t</span><span class="s2"> </span><span class="se">\t</span><span class="s2">&quot;</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="k">def</span> <span class="nf">exec</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">    Exécute les traitements spécifiques et complète le journal.</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">    - Extrait la liste des descriptions</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">    - Extrait la liste des indexations</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
 </span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="sd">    #### Paramètres</span>
 </span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">    `data`: données d&#39;exécution locale, valeur de `execloc` dans le dictionnaire `manifeste` défini par le module d&#39;initialisation [`init_mathPbs`](init_mathPbs.html).</span>
@@ -136,9 +131,11 @@ Pour cette hypothétique automatisation, il faudrait:</p>
 </span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>    <span class="n">descriptions</span> <span class="o">=</span> <span class="n">scantex</span><span class="o">.</span><span class="n">get_liste_descriptions</span><span class="p">(</span><span class="n">description_pattern</span><span class="p">)</span>
 </span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>    <span class="n">log</span> <span class="o">+=</span> <span class="n">lineprefix</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">descriptions</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot; descriptions </span><span class="se">\n</span><span class="s2">&quot;</span>
 </span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="n">specific_results</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;indexations&#39;</span><span class="p">:</span> <span class="n">indexations</span><span class="p">,</span> <span class="s1">&#39;descriptions&#39;</span><span class="p">:</span> <span class="n">descriptions</span><span class="p">}</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;log&#39;</span><span class="p">:</span> <span class="n">log</span><span class="p">,</span> <span class="s1">&#39;specific_results&#39;</span><span class="p">:</span> <span class="n">specific_results</span><span class="p">}</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="n">specific_results</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>        <span class="s1">&#39;indexations&#39;</span><span class="p">:</span> <span class="n">indexations</span><span class="p">,</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>        <span class="s1">&#39;descriptions&#39;</span><span class="p">:</span> <span class="n">descriptions</span><span class="p">}</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;log&#39;</span><span class="p">:</span> <span class="n">log</span><span class="p">,</span> <span class="s1">&#39;specific_results&#39;</span><span class="p">:</span> <span class="n">specific_results</span><span class="p">}</span>
 </span></pre></div>
 
 
@@ -154,9 +151,12 @@ Pour cette hypothétique automatisation, il faudrait:</p>
 
     </div>
     <a class="headerlink" href="#exec"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="exec-33"><a href="#exec-33"><span class="linenos">33</span></a><span class="k">def</span> <span class="nf">exec</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-</span><span id="exec-34"><a href="#exec-34"><span class="linenos">34</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="exec-35"><a href="#exec-35"><span class="linenos">35</span></a><span class="sd">    Exécute les traitements spécifiques et complète le journal.</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="exec-30"><a href="#exec-30"><span class="linenos">30</span></a><span class="k">def</span> <span class="nf">exec</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+</span><span id="exec-31"><a href="#exec-31"><span class="linenos">31</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="exec-32"><a href="#exec-32"><span class="linenos">32</span></a><span class="sd">    Exécute les traitements spécifiques et complète le journal.</span>
+</span><span id="exec-33"><a href="#exec-33"><span class="linenos">33</span></a>
+</span><span id="exec-34"><a href="#exec-34"><span class="linenos">34</span></a><span class="sd">    - Extrait la liste des descriptions</span>
+</span><span id="exec-35"><a href="#exec-35"><span class="linenos">35</span></a><span class="sd">    - Extrait la liste des indexations</span>
 </span><span id="exec-36"><a href="#exec-36"><span class="linenos">36</span></a>
 </span><span id="exec-37"><a href="#exec-37"><span class="linenos">37</span></a><span class="sd">    #### Paramètres</span>
 </span><span id="exec-38"><a href="#exec-38"><span class="linenos">38</span></a><span class="sd">    `data`: données d&#39;exécution locale, valeur de `execloc` dans le dictionnaire `manifeste` défini par le module d&#39;initialisation [`init_mathPbs`](init_mathPbs.html).</span>
@@ -184,13 +184,20 @@ Pour cette hypothétique automatisation, il faudrait:</p>
 </span><span id="exec-60"><a href="#exec-60"><span class="linenos">60</span></a>    <span class="n">descriptions</span> <span class="o">=</span> <span class="n">scantex</span><span class="o">.</span><span class="n">get_liste_descriptions</span><span class="p">(</span><span class="n">description_pattern</span><span class="p">)</span>
 </span><span id="exec-61"><a href="#exec-61"><span class="linenos">61</span></a>    <span class="n">log</span> <span class="o">+=</span> <span class="n">lineprefix</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">descriptions</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot; descriptions </span><span class="se">\n</span><span class="s2">&quot;</span>
 </span><span id="exec-62"><a href="#exec-62"><span class="linenos">62</span></a>    
-</span><span id="exec-63"><a href="#exec-63"><span class="linenos">63</span></a>    <span class="n">specific_results</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;indexations&#39;</span><span class="p">:</span> <span class="n">indexations</span><span class="p">,</span> <span class="s1">&#39;descriptions&#39;</span><span class="p">:</span> <span class="n">descriptions</span><span class="p">}</span>
-</span><span id="exec-64"><a href="#exec-64"><span class="linenos">64</span></a>    
-</span><span id="exec-65"><a href="#exec-65"><span class="linenos">65</span></a>    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;log&#39;</span><span class="p">:</span> <span class="n">log</span><span class="p">,</span> <span class="s1">&#39;specific_results&#39;</span><span class="p">:</span> <span class="n">specific_results</span><span class="p">}</span>
+</span><span id="exec-63"><a href="#exec-63"><span class="linenos">63</span></a>    <span class="n">specific_results</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="exec-64"><a href="#exec-64"><span class="linenos">64</span></a>        <span class="s1">&#39;indexations&#39;</span><span class="p">:</span> <span class="n">indexations</span><span class="p">,</span>
+</span><span id="exec-65"><a href="#exec-65"><span class="linenos">65</span></a>        <span class="s1">&#39;descriptions&#39;</span><span class="p">:</span> <span class="n">descriptions</span><span class="p">}</span>
+</span><span id="exec-66"><a href="#exec-66"><span class="linenos">66</span></a>    
+</span><span id="exec-67"><a href="#exec-67"><span class="linenos">67</span></a>    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;log&#39;</span><span class="p">:</span> <span class="n">log</span><span class="p">,</span> <span class="s1">&#39;specific_results&#39;</span><span class="p">:</span> <span class="n">specific_results</span><span class="p">}</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Exécute les traitements spécifiques et complète le journal.</p>
+
+<ul>
+<li>Extrait la liste des descriptions</li>
+<li>Extrait la liste des indexations</li>
+</ul>
 
 <h4 id="parametres">Paramètres</h4>
 
