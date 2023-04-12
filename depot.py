@@ -1,12 +1,12 @@
 """
 Module principal de maintenance d'un dépôt.
 
-Modifié le 09/01/23  @author: nicolair
+Modifié le 30/03/23  @author: nicolair
 
 - Importe les modules
-    - [`execlocal`](execlocal.html)
-    - [`espace`](espace.html)
-    - à définir (contextualisation).
+    - [`execlocal`](execlocal.html) (traitement des fichiers du dépôt)
+    - [`espace`](espace.html) (publication)
+    - [`graphdb`](graphdb.html) (contextualisation).
 
 - Définit la classe `Depot`.
 
@@ -52,6 +52,7 @@ class Depot():
         - Instancie une classe d'exécution locale `Execlocal`
             - maintenance des fichiers Latex
             - compilations diverses
+            - extraction de données des fichiers
             - Ajoute le `.log` de l'instance de `Execlocal` au `.log` du `Depot`.
         - Instancie une classe de publication `Espace`
             - maintenance de l'espace dédié au dépôt.
@@ -67,7 +68,7 @@ class Depot():
             - DESCRIPTION code le manifeste du dépôt
 
         La structure de ce dictionnaire est précisée dans le fichier
-        d'initialisation spécifique [`init_mathExos`](init_mathExos.html)
+        d'initialisation spécifique [`init_mathCours`](init_mathCours.html), [`init_mathExos`](init_mathExos.html)
         [`init_mathPbs`](init_mathPbs.html)
 
         #### Renvoie

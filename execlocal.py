@@ -2,14 +2,14 @@
 """
 Exécute localement les scripts préliminaires à la publication et à la contextualisation des sources d'un dépôt.
 
-Modifié le 03/03/23 @author: remy
+Modifié le 30/03/23 @author: remy
 
 Traitements à effectuer sur les fichiers d'un dépôt : 
 
 - créer-modifier les sources avant compilation
 - compiler
 - établir des listes de fichiers images à publier
-- établir des listes de données à contextualiser
+- établir des listes de données utiles lors de la contextualisation
 
 Le module `execlocal`
 - Importe le sous-module [`scantex`](scantex.html) d'examen des fichiers LateX.
@@ -17,10 +17,12 @@ Le module `execlocal`
 
 Les traitements sont effectués lors de l'instanciation d'un objet `Execlocal`. Cette instanciation importe un module spécifique au dépôt.  
 Actuellement, les sous-modules spécifiques sont 
-[`exl_mathExos`](exl_mathExos.html) et 
+[`exl_mathCours`](exl_mathCours.html), [`exl_mathExos`](exl_mathExos.html) et 
 [`exl_mathPbs`](exl_mathPbs.html).
 
-Les commandes de compilation sont codées dans le fichier `init` (manifeste) du dépôt. Elles sont lancées par la méthode `compil()` de la classe `Execlocal`. Les autres traitements sont définis dans la fonction `exec()` du sous-module spécifique.
+Les commandes de compilation sont codées dans le fichier `init` (manifeste) du dépôt. Elles sont lancées par la méthode `compil()` de la classe `Execlocal`.  
+Les données à publier sont extraites par `apublierImg()`.  
+Les autres traitements sont définis dans la fonction `exec()` du sous-module spécifique.
 
 Principales propriétés d'un objet `Execlocal` :
 

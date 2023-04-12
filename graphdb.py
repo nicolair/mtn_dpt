@@ -2,7 +2,7 @@
 """
 Interface avec la partie de la base de données en graphe reflétant le dépôt.
 
-Modifié le 05/03/23   @author: remy
+Modifié le 30/03/23   @author: remy
 
 - Définit des outils utiles pour tous les dépôts
 - Importe le sous-module `bdg_xxxx` spécifique au dépôt sous le nom `specific`.
@@ -12,7 +12,7 @@ La maintenance de la base est réalisée par des requêtes cypher définies
  dans `specific` et exécutés lors de l'instanciation de la classe `Maquis`
  par l'appel `specific.exec()`.
  
-Les sous-modules spécifiques sont [`bdg_mathPbs`](bdg_mathPbs.html) et [`bdg_mathExos`](bdg_mathExos.html)
+Les sous-modules spécifiques sont [`bdg_mathCours`](bdg_mathCours.html), [`bdg_mathExos`](bdg_mathExos.html) et [`bdg_mathPbs`](bdg_mathPbs.html)
 
 """
 import importlib

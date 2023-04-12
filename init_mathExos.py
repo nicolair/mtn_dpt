@@ -2,7 +2,7 @@
 """
 Ce module code et présente le *manifeste* du dépôt `math-exos`.
 
-Modifié le 09/03/23 @author: remy
+Modifié le 29/03/23 @author: remy
 
 Le manifeste d'un dépôt décrit
 - les conventions de nommage des fichiers permettant leur traitement local avant publication et contextualisation,
@@ -53,15 +53,18 @@ Ils sont mis à jour par la maintenance puis compilés dans des fichiers pdf pla
     - mise à jour des fichiers LateX d'exercices individuels `Aexo_`
     - mise à jour des fichiers Latex de feuille par thème `A`
     
-- Avant contextualisation
-
-- Compilation
-
 - Avant publication
+    - les fichiers `Aexo_` sont compilés en html et placés dans `htmldir`
+    - les fichiers `A` sont compilés en pdf et placés dans `pdfdir`
+  
+- Avant contextualisation
+    - Les fichiers `E` sont scannés pour former les listes par code de thème
+    - Les fichiers `*.idx` sont scannés pour extraire les index.
+
 
 ### Publication
 
-Voir le sous-module [`espace`](espace.html) pour la mis en oeuvre de la publication. 
+Voir le sous-module [`espace`](espace.html) pour la mise en oeuvre de la publication. 
 
 Ce sous-module ne définit en clair que les paramètres publics du serveur de publication.
 Les credentials secrets sont définis dans le fichier local `~/.aws`.

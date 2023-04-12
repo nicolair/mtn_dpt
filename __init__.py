@@ -1,7 +1,7 @@
 """
 Package `Maintenance`. Maintient les dépôts maquisdoc.
 
-Modifié le 09/03/23 @author: remy
+Modifié le 30/03/23 @author: remy
 
 Attention dans cette documentation, le terme 'dépôt' désigne une composante
 du projet maquisdoc. On utilisera 'dépot (GitHub)' pour désigner un dépôt
@@ -28,7 +28,7 @@ dépôt(GitHub). Les scripts et modules de maintenance ne sont pas encore implé
 | ---------------- | ----------------- | --------------------------- |
 |math-exos         | [math-exos](https://github.com/nicolair/math-exos) | [`maintenir_mathExos`](maintenance/maintenir_mathExos.html)|
 |math-pbs          | [math-pbs](https://github.com/nicolair/math-pbs) | [`maintenir_mathPbs`](maintenance/maintenir_mathPbs.html)|
-|math-cours        | [math-cours](https://github.com/nicolair/math-cours) | à faire |
+|math-cours        | [math-cours](https://github.com/nicolair/math-cours) | [`maintenir_mathCours`](maintenance/maintenir_mathCours.html) |
 |math-rapidexos    | [math-cours](https://github.com/nicolair/math-rapidexos) | à faire |
 
 Le script de maintenance importe des sous-modules spécifiques ainsi que des sous-modules communs.
@@ -134,7 +134,7 @@ L'initialisation de l'instance de `Depot` instancie
 - un objet `Espace`
 - un objet `Maquis`
 
-L'instanciation de l'objet `Execlocal` met à jour le dossier local.
+L'instanciation de l'objet `Execlocal` met à jour le dossier local et extrait du dépôt les données locales utiles aux traitements suivants.
 
 L'instanciation de l'objet `Espace` met à jour l'espace associé au dépôt.
 
@@ -159,18 +159,22 @@ if localpath not in sys.path:
     sys.path.append(os.path.dirname(__file__))
 
 __all__ = [
+    "maintenir_mathCours",
     "maintenir_mathExos",
     "maintenir_mathPbs",
+    "depot",
+    "init_mathCours",
     "init_mathExos",
     "init_mathPbs",
+    "scantex",
+    "execlocal",
+    "exl_mathCours",
     "exl_mathExos",
     "exl_mathPbs",
-    "bdg_mathPbs",
+    "graphdb",
+    "bdg_mathCours",
     "bdg_mathExos",
-    "depot",
-    "execlocal",
-    "scantex",
-    "espace",
-    "graphdb"
+    "bdg_mathPbs",
+    "espace"
     ]
 

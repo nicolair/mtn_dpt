@@ -9,6 +9,39 @@ Travaille dans le répertoire courant c'est à dire celui du dépôt à mainteni
 import os
 import glob
 
+def latex2accent(texte):
+    LatexAccent = {
+        r"\IeC {\'e}": "é",
+        r"\IeC {\'E}": "É",
+        r"\IeC {\`e}": "è",
+        r"\IeC {\^e}": "ê",
+        r"\IeC {\^E}": "Ê",
+        r"\IeC {\¨e}": "ë",
+        r"\IeC {\¨E}": "Ë",
+        r"\IeC {\`a}": "à",
+        r"\IeC {\'A}": "À",
+        r"\IeC {\^a}": "â",
+        r"\IeC {\^A}": "Â",
+        r"\IeC {\^i}": "î",
+        r"\IeC {\^I}": "Î",
+        r"\IeC {\¨i}": "ï",
+        r"\IeC {\¨I}": "Ï",
+        r"\IeC {\^o}": "ô",
+        r"\IeC {\^O}": "Ô",
+        r"\IeC {\^u}": "û",
+        r"\IeC {\^U}": "Û",
+        r"\IeC {\¨u}": "ü",
+        r"\IeC {\¨U}": "Ü",
+        r"\IeC {\c c}": "ç",
+        r"\IeC {\oe}": "œ",
+        r"\'e": "é",
+        r"\`e": "è",
+        r"\`a": "à"
+    }
+    for latex, accent in LatexAccent.items():
+        texte = texte.replace(latex,accent)
+    return texte
+
 def get_date_srce(nom):
     """
     Renvoie une date de source.
@@ -52,7 +85,6 @@ def get_date_srce(nom):
 def get_liste_inputs(nom):
     """Renvoie la liste des sources tex dans des input."""
     fifi = open(nom, 'r')
-
     text = fifi.read()
     long = len(text)
     inputs = []
@@ -196,6 +228,7 @@ def get_liste_indexations(path_pattern):
                 else:
                     i = line.find('}')
                 line = line[0:i]
+                line = latex2accent(line)
                 indexations.append([doc,line])
         f.close()
     # print(indexations)
@@ -233,3 +266,15 @@ def get_liste_descriptions(description_pattern):
             nomfic = nomfic.removesuffix('.tex')
             descriptions.append([nomfic,fictex[i:j]])
     return descriptions
+
+def get_entre_tags(nom,debut,fin):
+    """
+    Renvoie la chaine de caractère entre les tags.
+    """
+    fifi = open(nom, 'r')
+    text = fifi.read()
+    ind_debut = text.find(debut) + len(debut)
+    ind_fin = text.find(fin, ind_debut)
+    return text[ind_debut:ind_fin]
+
+    
