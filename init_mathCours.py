@@ -95,7 +95,7 @@ execloc = {
            },
         ],
     'publish_data': {
-        'patterns': ['pdfdir/C*.pdf', 'htmldir/*']
+        'patterns': ['pdfdir/C*.pdf', 'S*.pdf']
         },
     'context_data': {
         'idx_path_pattern': 'C*.idx',

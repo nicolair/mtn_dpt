@@ -61,7 +61,10 @@ def get_date_srce(nom):
         date_srce = 0
 
     # date des sources tex inputtés
-    liste = get_liste_inputs(nom)
+    try:
+        liste = get_liste_inputs(nom)
+    except UnicodeDecodeError:
+        print(nom)
     for fic in liste:
         t = get_date_srce(fic)
         # print(fic,t)

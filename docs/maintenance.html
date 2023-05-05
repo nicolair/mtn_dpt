@@ -24,19 +24,23 @@
 
         <h2>Submodules</h2>
         <ul>
+                <li><a href="maintenance/maintenir_mathCours.html">maintenir_mathCours</a></li>
                 <li><a href="maintenance/maintenir_mathExos.html">maintenir_mathExos</a></li>
                 <li><a href="maintenance/maintenir_mathPbs.html">maintenir_mathPbs</a></li>
+                <li><a href="maintenance/depot.html">depot</a></li>
+                <li><a href="maintenance/init_mathCours.html">init_mathCours</a></li>
                 <li><a href="maintenance/init_mathExos.html">init_mathExos</a></li>
                 <li><a href="maintenance/init_mathPbs.html">init_mathPbs</a></li>
+                <li><a href="maintenance/scantex.html">scantex</a></li>
+                <li><a href="maintenance/execlocal.html">execlocal</a></li>
+                <li><a href="maintenance/exl_mathCours.html">exl_mathCours</a></li>
                 <li><a href="maintenance/exl_mathExos.html">exl_mathExos</a></li>
                 <li><a href="maintenance/exl_mathPbs.html">exl_mathPbs</a></li>
-                <li><a href="maintenance/bdg_mathPbs.html">bdg_mathPbs</a></li>
-                <li><a href="maintenance/bdg_mathExos.html">bdg_mathExos</a></li>
-                <li><a href="maintenance/depot.html">depot</a></li>
-                <li><a href="maintenance/execlocal.html">execlocal</a></li>
-                <li><a href="maintenance/scantex.html">scantex</a></li>
-                <li><a href="maintenance/espace.html">espace</a></li>
                 <li><a href="maintenance/graphdb.html">graphdb</a></li>
+                <li><a href="maintenance/bdg_mathCours.html">bdg_mathCours</a></li>
+                <li><a href="maintenance/bdg_mathExos.html">bdg_mathExos</a></li>
+                <li><a href="maintenance/bdg_mathPbs.html">bdg_mathPbs</a></li>
+                <li><a href="maintenance/espace.html">espace</a></li>
         </ul>
 
 
@@ -55,7 +59,7 @@ maintenance    </h1>
 
                         <div class="docstring"><p>Package <code>Maintenance</code>. Maintient les dépôts maquisdoc.</p>
 
-<p>Modifié le 09/03/23 @author: remy</p>
+<p>Modifié le 30/03/23 @author: remy</p>
 
 <p>Attention dans cette documentation, le terme 'dépôt' désigne une composante
 du projet maquisdoc. On utilisera 'dépot (GitHub)' pour désigner un dépôt
@@ -102,7 +106,7 @@ dépôt(GitHub). Les scripts et modules de maintenance ne sont pas encore implé
 <tr>
   <td>math-cours</td>
   <td><a href="https://github.com/nicolair/math-cours">math-cours</a></td>
-  <td>à faire</td>
+  <td><a href="maintenance/maintenir_mathCours.html"><code>maintenir_mathCours</code></a></td>
 </tr>
 <tr>
   <td>math-rapidexos</td>
@@ -344,7 +348,7 @@ L'initialisation de l'instance de <code>Depot</code> instancie</p>
 <li>un objet <code>Maquis</code></li>
 </ul>
 
-<p>L'instanciation de l'objet <code>Execlocal</code> met à jour le dossier local.</p>
+<p>L'instanciation de l'objet <code>Execlocal</code> met à jour le dossier local et extrait du dépôt les données locales utiles aux traitements suivants.</p>
 
 <p>L'instanciation de l'objet <code>Espace</code> met à jour l'espace associé au dépôt.</p>
 
@@ -368,7 +372,7 @@ L'initialisation de l'instance de <code>Depot</code> instancie</p>
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="sd">Package `Maintenance`. Maintient les dépôts maquisdoc.</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="sd">Modifié le 09/03/23 @author: remy</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="sd">Modifié le 30/03/23 @author: remy</span>
 </span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a>
 </span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="sd">Attention dans cette documentation, le terme &#39;dépôt&#39; désigne une composante</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="sd">du projet maquisdoc. On utilisera &#39;dépot (GitHub)&#39; pour désigner un dépôt</span>
@@ -395,7 +399,7 @@ L'initialisation de l'instance de <code>Depot</code> instancie</p>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="sd">| ---------------- | ----------------- | --------------------------- |</span>
 </span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="sd">|math-exos         | [math-exos](https://github.com/nicolair/math-exos) | [`maintenir_mathExos`](maintenance/maintenir_mathExos.html)|</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="sd">|math-pbs          | [math-pbs](https://github.com/nicolair/math-pbs) | [`maintenir_mathPbs`](maintenance/maintenir_mathPbs.html)|</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="sd">|math-cours        | [math-cours](https://github.com/nicolair/math-cours) | à faire |</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="sd">|math-cours        | [math-cours](https://github.com/nicolair/math-cours) | [`maintenir_mathCours`](maintenance/maintenir_mathCours.html) |</span>
 </span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="sd">|math-rapidexos    | [math-cours](https://github.com/nicolair/math-rapidexos) | à faire |</span>
 </span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>
 </span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="sd">Le script de maintenance importe des sous-modules spécifiques ainsi que des sous-modules communs.</span>
@@ -501,7 +505,7 @@ L'initialisation de l'instance de <code>Depot</code> instancie</p>
 </span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a><span class="sd">- un objet `Espace`</span>
 </span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="sd">- un objet `Maquis`</span>
 </span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>
-</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="sd">L&#39;instanciation de l&#39;objet `Execlocal` met à jour le dossier local.</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="sd">L&#39;instanciation de l&#39;objet `Execlocal` met à jour le dossier local et extrait du dépôt les données locales utiles aux traitements suivants.</span>
 </span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>
 </span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="sd">L&#39;instanciation de l&#39;objet `Espace` met à jour l&#39;espace associé au dépôt.</span>
 </span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>
@@ -526,20 +530,24 @@ L'initialisation de l'instance de <code>Depot</code> instancie</p>
 </span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
 </span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>
 </span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>    <span class="s2">&quot;maintenir_mathExos&quot;</span><span class="p">,</span>
-</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>    <span class="s2">&quot;maintenir_mathPbs&quot;</span><span class="p">,</span>
-</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>    <span class="s2">&quot;init_mathExos&quot;</span><span class="p">,</span>
-</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>    <span class="s2">&quot;init_mathPbs&quot;</span><span class="p">,</span>
-</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>    <span class="s2">&quot;exl_mathExos&quot;</span><span class="p">,</span>
-</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>    <span class="s2">&quot;exl_mathPbs&quot;</span><span class="p">,</span>
-</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>    <span class="s2">&quot;bdg_mathPbs&quot;</span><span class="p">,</span>
-</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>    <span class="s2">&quot;bdg_mathExos&quot;</span><span class="p">,</span>
-</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>    <span class="s2">&quot;depot&quot;</span><span class="p">,</span>
-</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>    <span class="s2">&quot;execlocal&quot;</span><span class="p">,</span>
-</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a>    <span class="s2">&quot;scantex&quot;</span><span class="p">,</span>
-</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a>    <span class="s2">&quot;espace&quot;</span><span class="p">,</span>
-</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a>    <span class="s2">&quot;graphdb&quot;</span>
-</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>    <span class="p">]</span>
+</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>    <span class="s2">&quot;maintenir_mathCours&quot;</span><span class="p">,</span>
+</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>    <span class="s2">&quot;maintenir_mathExos&quot;</span><span class="p">,</span>
+</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>    <span class="s2">&quot;maintenir_mathPbs&quot;</span><span class="p">,</span>
+</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>    <span class="s2">&quot;depot&quot;</span><span class="p">,</span>
+</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>    <span class="s2">&quot;init_mathCours&quot;</span><span class="p">,</span>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>    <span class="s2">&quot;init_mathExos&quot;</span><span class="p">,</span>
+</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>    <span class="s2">&quot;init_mathPbs&quot;</span><span class="p">,</span>
+</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>    <span class="s2">&quot;scantex&quot;</span><span class="p">,</span>
+</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>    <span class="s2">&quot;execlocal&quot;</span><span class="p">,</span>
+</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>    <span class="s2">&quot;exl_mathCours&quot;</span><span class="p">,</span>
+</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a>    <span class="s2">&quot;exl_mathExos&quot;</span><span class="p">,</span>
+</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a>    <span class="s2">&quot;exl_mathPbs&quot;</span><span class="p">,</span>
+</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a>    <span class="s2">&quot;graphdb&quot;</span><span class="p">,</span>
+</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>    <span class="s2">&quot;bdg_mathCours&quot;</span><span class="p">,</span>
+</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a>    <span class="s2">&quot;bdg_mathExos&quot;</span><span class="p">,</span>
+</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a>    <span class="s2">&quot;bdg_mathPbs&quot;</span><span class="p">,</span>
+</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>    <span class="s2">&quot;espace&quot;</span>
+</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>    <span class="p">]</span>
 </span></pre></div>
 
 
