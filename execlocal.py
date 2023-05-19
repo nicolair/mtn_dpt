@@ -156,15 +156,17 @@ class Execlocal:
                 fics.extend(glob.glob(paty))
                 # print(fics,"\n")
 
+            #print(fics)
             for src in fics:
                 srcext = os.path.splitext(src)[1]
                 didi = os.path.dirname(src)
                 img = os.path.join(didi, imgdir, os.path.basename(src))
                 img = img.replace(srcext, imgext)
                 # if ("A_" in src):
-                #    print(src, img)
+                #print(src, img)
                 if scantex.acompiler(src, img):
                     obj['fics'].append(src)
+                    #print(src, img)
             aexec.append(obj)
         return aexec
 

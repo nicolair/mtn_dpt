@@ -50,6 +50,8 @@ def exec(self):
     password = data['credentials']['password']
     AUTH = (user, password)
 
+    driver = neo4j.GraphDatabase.driver(URI, auth=AUTH)
+
     # données locales (dictionnaires)
     loc_dictExos = self.specific_results['listeExos']
     loc_exercices = []
@@ -70,7 +72,7 @@ def exec(self):
     # Nouvelle requête:
     new_req = 'MATCH (f:Document {typeDoc:"liste exercices"})-[:CONTIENT]-> (e:Document {typeDoc:"exercice", discipline:"mathématique"})-[:EVALUE]->(c:Concept) WHERE f.titre = c.litteral RETURN f.titre, e.titre, c.litteral ORDER BY e.titre'
     #print(new_req)
-    with neo4j.GraphDatabase.driver(URI, auth=AUTH).session(database="neo4j") as session:
+    with driver.session(database="neo4j") as session:
         rem_feu_exo_con = session.execute_read(self.do_cypher_tx, new_req)
     #print(rem_feu_exo_con[0:3])
     rem_exercices = list(map(lambda x: x[1], rem_feu_exo_con))
@@ -79,7 +81,7 @@ def exec(self):
     # codes et thèmes dans le graphe
     # codes des thèmes
     req = 'MATCH (f:Document {typeDoc:"liste exercices"})-[:CONTIENT]-> (e:Document {typeDoc:"exercice", discipline:"mathématique"}) RETURN DISTINCT f.titre, left(e.titre,2) AS code ORDER BY code'
-    with neo4j.GraphDatabase.driver(URI, auth=AUTH).session(database="neo4j") as session:
+    with driver.session(database="neo4j") as session:
         rem_theme_code = session.execute_read(self.do_cypher_tx, req)
     #print(rem_theme_code[0:5])
     themes = {l[1]:l[0] for l in rem_theme_code}
@@ -89,7 +91,7 @@ def exec(self):
              'propsF' :"{typeDoc:'liste exercices'}",
              'propsR' : "n.titre"}
     req = self.format_cypher_RETURN(param)
-    with neo4j.GraphDatabase.driver(URI, auth=AUTH).session(database="neo4j") as session:
+    with driver.session(database="neo4j") as session:
         rem_feuilles = session.execute_read(self.do_cypher_tx, req)
     rem_feuilles = list(map(lambda x: x[0], rem_feuilles))
     # pour bien ranger les accents
@@ -143,6 +145,7 @@ def exec(self):
     #print("\n Indexations locales")
     indexe(self, loc_indexations)
     
+    driver.close()
     log = ""
     return log
 
@@ -166,6 +169,8 @@ def nouveaux_exos(self,loc_exos_orph,themes):
     password = data['credentials']['password']
     AUTH = (user, password)
 
+    driver = neo4j.GraphDatabase.driver(URI, auth=AUTH)
+
     for nom in loc_exos_orph:
         code = nom[:2]
         theme = themes[code]
@@ -183,7 +188,7 @@ def nouveaux_exos(self,loc_exos_orph,themes):
         param = {'label': label, 'propsF': propsF}
         req = self.format_cypher_CREATE(param)
         #print(req)
-        with neo4j.GraphDatabase.driver(URI,auth=AUTH).session(database="neo4j") as session:
+        with driver.session(database="neo4j") as session:
             val = session.execute_write(self.do_cypher_tx, req)
 
         # créer la relation feuille [CONTIENT] exercice
@@ -191,7 +196,7 @@ def nouveaux_exos(self,loc_exos_orph,themes):
         MATCH (f:Document {{typeDoc: "liste exercices", titre: "{1}"}})
         CREATE (f) -[r:CONTIENT]-> (e)'''
         req = req.format(nom, theme)
-        with neo4j.GraphDatabase.driver(URI, auth=AUTH).session(database="neo4j") as session:
+        with driver.session(database="neo4j") as session:
             val = session.execute_write(self.do_cypher_tx, req)
 
         # créer la relation exercice [EVALUE] theme (concept)
@@ -199,8 +204,10 @@ def nouveaux_exos(self,loc_exos_orph,themes):
         MATCH (c:Concept {{typeConcept: "thème feuille exercices", litteral: "{1}"}})
         CREATE (e) -[:EVALUE]-> (c)'''
         req = req.format(nom, theme)
-        with neo4j.GraphDatabase.driver(URI, auth=AUTH).session(database="neo4j") as session:
+        with driver.session(database="neo4j") as session:
             val = session.execute_write(self.do_cypher_tx, req)
+
+        driver.close()
 
 def indexe(self, loc_indexations):
     '''
@@ -213,12 +220,14 @@ def indexe(self, loc_indexations):
     password = data['credentials']['password']
     AUTH = (user, password)
 
+    driver = neo4j.GraphDatabase.driver(URI, auth=AUTH)
+
     # indexations dans le graphe
     req = ''' MATCH (e:Document {typeDoc:"exercice", discipline: "mathématique"}) -[:INDEXE]-> (c:Concept)
     RETURN "Aexo_" + e.titre, c.litteral
     '''
     #print(req)
-    with neo4j.GraphDatabase.driver(URI, auth=AUTH).session(database="neo4j") as session:
+    with driver.session(database="neo4j") as session:
             rem_indexations = session.execute_write(self.do_cypher_tx, req)
 
     print(rem_indexations)
@@ -235,6 +244,8 @@ def indexe(self, loc_indexations):
             nom = index[0][5:]
             concept = index[1]
             req1 = req.format(nom, concept)
-            with neo4j.GraphDatabase.driver(URI, auth=AUTH).session(database="neo4j") as session:
+            with driver.session(database="neo4j") as session:
                 val = session.execute_write(self.do_cypher_tx, req1)
+
+    driver.close()
 

@@ -9,7 +9,7 @@ packages = [{ include = "test.py"} ]
 python = "^3.10"
 boto3 = "^1.26.41"
 pdoc = "^12.3.0"
-neo4j = "^5.4.0"
+neo4j = "^5.8.0"
 
 [tool.poetry.dev-dependencies]
 

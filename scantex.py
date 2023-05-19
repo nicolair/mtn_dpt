@@ -186,7 +186,7 @@ def acompiler(src, img):
 
     """
     # imgext = os.path.splitext(img)[1]
-    # print(img)
+    #print(src,img)
     date_img = 0
     date_src = get_date_srce(src)
     if os.path.exists(img):

@@ -4,7 +4,7 @@ Modifié le 30/03/23  @author: remy
 
 Maintenir le dépôt `math-cours`.
 
-- Importe [`init_mathCours`](init_mathCous.html) qui code le *manifeste* du
+- Importe [`init_mathCours`](init_mathCours.html) qui code le *manifeste* du
   dépôt.
 - Instancie un objet `Depot` ce qui effectue la maintenance.
 - Affiche la propriété `.journal` de l'objet `Depot`.

@@ -101,7 +101,7 @@ class Maquis:
         """
         Renvoie une requête cypher de type `DETACH DELETE`.
 
-        ATTENTION ! Ce type de requte est à manier avec précaution.
+        ATTENTION ! Ce type de requête est à manier avec précaution.
          Toujours vérifier ce qui sera détruit.
 
         Dans la chaîne modèle

@@ -82,15 +82,18 @@ def exec(self):
     user = data['credentials']['user']
     password = data['credentials']['password']
     AUTH = (user, password)
+
+    driver = neo4j.GraphDatabase.driver(URI, auth=AUTH)
     
     loc_indexations = self.specific_results['indexations']
     loc_descriptions = self.specific_results['descriptions']
 
+    # descriptions
     param = {'label' : "Document", 
              'propsF' :"{typeDoc:'problème'}", 
              'propsR' : "n.titre, n.description"}
     req = self.format_cypher_RETURN(param)
-    with neo4j.GraphDatabase.driver(URI, auth=AUTH).session(database="neo4j") as session:
+    with driver.session(database="neo4j") as session:
         rem_descriptions = session.execute_read(self.do_cypher_tx, req)
 
     loc_descriptions.sort(key=lambda descrpt: descrpt[0])
@@ -120,7 +123,7 @@ def exec(self):
         param['propsF'] = '{' + param['propsF'] + '}'
         req = self.format_cypher_DELETE(param)
         print(req)
-        with neo4j.GraphDatabase.driver(URI, auth=AUTH).session(database="neo4j") as session:
+        with driver.session(database="neo4j") as session:
             val = session.execute_write(self.do_cypher_tx, req)
         print(val)
 
@@ -162,7 +165,7 @@ def exec(self):
             param["propsV"] = param["propsV"].format(descrpL=descrpL)
             req = self.format_cypher_SET(param)
             print(req)
-            with neo4j.GraphDatabase.driver(URI, auth=AUTH).session(database="neo4j") as session:
+            with driver.session(database="neo4j") as session:
                 val = session.execute_write(self.do_cypher_tx, req)
                 print(val)
 
@@ -170,6 +173,7 @@ def exec(self):
     #print("\n Indexations locales")
     indexe(self,loc_indexations)
 
+    driver.close()
 
     log = ""
     return log
@@ -185,12 +189,14 @@ def indexe(self, loc_indexations):
     password = data['credentials']['password']
     AUTH = (user, password)
 
+    driver = neo4j.GraphDatabase.driver(URI, auth=AUTH)
+
     # indexations dans le graphe
     req = ''' MATCH (p:Document {typeDoc:"problème"}) -[:INDEXE]-> (c:Concept)
     RETURN "A" + p.titre, c.litteral
     '''
     #print(req)
-    with neo4j.GraphDatabase.driver(URI, auth=AUTH).session(database="neo4j") as session:
+    with driver.session(database="neo4j") as session:
         rem_indexations = session.execute_write(self.do_cypher_tx, req)
 
     print(rem_indexations)
@@ -208,6 +214,9 @@ def indexe(self, loc_indexations):
             concept = index[1]
             req1 = req.format(nom, concept)
             print(nom, concept, req1)
-            with neo4j.GraphDatabase.driver(URI, auth=AUTH).session(database="neo4j") as session:
+            with driver.session(database="neo4j") as session:
                 val = session.execute_write(self.do_cypher_tx, req1)
+
+    driver.close()
+
 
