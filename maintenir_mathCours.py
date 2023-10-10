@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Modifié le 30/03/23  @author: remy
+Modifié le 10/10/23  @author: remy
 
 Maintenir le dépôt `math-cours`.
 
