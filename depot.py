@@ -1,7 +1,7 @@
 """
 Module principal de maintenance d'un dépôt.
 
-Modifié le 30/03/23  @author: nicolair
+Modifié le 10/10/23  @author: nicolair
 
 - Importe les modules
     - [`execlocal`](execlocal.html) (traitement des fichiers du dépôt)
