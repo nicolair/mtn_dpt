@@ -28,7 +28,7 @@ jobs:
           python-version: '3.11'
           
       # install poetry
-      - name Install Poetry
+      - name: Install Poetry
         uses: snok/install-poetry@v1
 
       # ADJUST THIS: install all dependencies (including pdoc)
