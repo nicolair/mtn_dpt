@@ -1,7 +1,7 @@
 """
 Package `Maintenance`. Maintient les dépôts maquisdoc.
 
-Modifié le 30/03/23 @author: remy
+Modifié le 08/12/23 @author: remy
 
 Attention dans cette documentation, le terme 'dépôt' désigne une composante
 du projet maquisdoc. On utilisera 'dépot (GitHub)' pour désigner un dépôt
@@ -45,10 +45,10 @@ dans lesquels `math-exos` a été changé en `mathExos`.
 
 La maintenance utilise des modules externes à la bibliothèque Python standard. La gestion de l'environnement virtuel et des dépendances est assuré par [Poetry](https://python-poetry.org/docs/).  
 Exemples de commande:
-- `poetry install` pour installer localement les dépendances du projet définies dans `pyproject.toml` 
-- `poetry run python ./maintenir_mathExos.py` pour lancer la maintenance du dépôt
- d'exercice
-- `poetry run pdoc ../maintenance.py -o ./docs` pour lancer la création de cette
+- `poetry install` pour installer localement les dépendances du projet définies dans `pyproject.toml`. 
+- `poetry run python ./maintenir_mathExos.py`  pour lancer la maintenance du dépôt
+ d'exercices.
+- `poetry run pdoc "$PWD" ./docs` pour lancer la création de cette
  documentation.
 
 La maintenance d'un dépôt est lançée par le script indiqué dans le tableau précédent. Il importe d'abord le module spécifique d'initialisation (son nom commence par `init_`) représentant le *manifeste* du dépôt. Il importe ensuite des modules communs ainsi que d'autres modules spécifiques. Les différents types de modules et les classes définies sont précisés dans le paragraphe suivant. La maintenance du dépôt des problèmes est détaillée.

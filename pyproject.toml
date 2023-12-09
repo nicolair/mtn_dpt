@@ -6,10 +6,10 @@ authors = ["Rémy <remy.nicolai@gmail.com>"]
 packages = [{ include = "test.py"} ]
 
 [tool.poetry.dependencies]
-python = "^3.10"
-boto3 = "^1.26.41"
-pdoc = "^12.3.0"
-neo4j = "^5.8.0"
+python = "^3.12"
+boto3 = "^1.33.9"
+pdoc = "^14.1.0"
+neo4j = "^5.15.0"
 
 [tool.poetry.dev-dependencies]
 

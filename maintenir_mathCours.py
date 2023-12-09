@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Modifié le 10/10/23  @author: remy
+Modifié le 18/12/23  @author: remy
 
 Maintenir le dépôt `math-cours`.
+
+Commande de lancement
+
+      poetry run python ./maintenir_mathCours.py
 
 - Importe [`init_mathCours`](init_mathCours.html) qui code le *manifeste* du
   dépôt.
