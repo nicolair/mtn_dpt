@@ -2,7 +2,7 @@
 """
 Outils d'analyse de fichiers sources ou produits par LateX.
 
-Modifié le 22/01/23  @author: remy
+Modifié le 09/12/23  @author: remy
 
 Travaille dans le répertoire courant c'est à dire celui du dépôt à maintenir.
 """
@@ -10,6 +10,9 @@ import os
 import glob
 
 def latex2accent(texte):
+    """
+    Renvoie le texte dans lequel les accents codés en Latex sont remplacés par leur caractère utf8.
+    """
     LatexAccent = {
         r"\IeC {\'e}": "é",
         r"\IeC {\'E}": "É",

@@ -5,7 +5,7 @@ La contextualisation du dépôt de cours consiste à assurer que la base en grap
 
 Les méta-données sont définies par l'auteur et écrites dans le dépôt local. La modification d'une méta-donnée de ce type se fait dans le dépôt et non dans la base en graphe.
 
-Modifié le 08/12/23 @author: remy
+Modifié le 10/12/23 @author: remy
 
 La fonction `exec()` est appelée lors de l'instanciation de la classe `Maquis`. Elle appelle la fonction `indexe()`.
 
@@ -20,18 +20,18 @@ Un noeud labélisé `Document` est associé à un texte de cours `C` et caracté
 Exemple pour le fichier C1616.tex.
 Les premières lignes du fichier sont:
 
-    \input{courspdf.tex}
+    \\input{courspdf.tex}
     
-    \debutcours{Primitives et équations différentielles linéaires}{0.3 \tiny{\today}}
+    \\debutcours{Primitives et équations différentielles linéaires}{0.3 \\tiny{\\today}}
     
-    \section{Calculs de primitives.}
-    Les démonstrations des résultats admis dans cette section sont proposés dans le chapitre \href{\baseurl C2190.pdf}{Intégrales et primitives}.
+    \\section{Calculs de primitives.}
+    Les démonstrations des résultats admis dans cette section sont proposés dans le chapitre \\href{\\baseurl C2190.pdf}{Intégrales et primitives}.
     
-    \subsection{Définition et primitives usuelles.}
-    \subsubsection{Résultats admis.}
-    \begin{defi}
+    \\subsection{Définition et primitives usuelles.}
+    \\subsubsection{Résultats admis.}
+    \\begin{defi}
     Une primitive d'une fonction $f$ définie dans un intervalle $I$ à valeurs complexes est une fonction $F$ dérivable dans $I$ et dont la dérivée est $f$. 
-    \end{defi}
+    \\end{defi}
 
 Les lignes suivantes présentent la requête cypher pour extraire ce noeud 
 
@@ -57,7 +57,9 @@ et le noeud renvoyé
     
 #### Index définis dans un texte de cours.
 
-Les index sont définis dans la source LateX par la commande `\index`. Lors de la compilation, un fichier `.idx` est créé qui permet localement d'associer l'index et le texte de cours. Du côté de la base en graphe, un index est un noeud labelisé `Concept`. Une arête labélisée `INDEXE` issue du noeud associé au texte de cours pointe vers le noeud associé à l'index.
+Les index sont définis dans la source LateX par la commande `\\index`. Lors de la compilation, un fichier `.idx` est créé qui permet localement d'associer l'index et le texte de cours. Attention, un index peut figurer plusieurs fois dans un document. La liste des indexations (paire fichier, litteral) calculée par `scantex` peut contenir plusieurs fois la même paire.
+
+Du côté de la base en graphe, un index est un noeud labelisé `Concept`. Une arête labélisée `INDEXE` issue du noeud associé au texte de cours pointe vers le noeud associé à l'index.
 
 """
 import neo4j
